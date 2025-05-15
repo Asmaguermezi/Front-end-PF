@@ -16,22 +16,26 @@ import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 
 import Welcome from "views/Welcome.js";
-import Welcomeadmin from "views/Welcomeadmin.js";
+
+
+import { LanguageProvider } from "./context/LanguageContext";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      {/* add routes with layouts */}
-      <Route path="/admin" component={Admin} />
-      <Route path="/auth" component={Auth} />
-      {/* add routes without layouts */}
-      <Route path="/landing" exact component={Landing} />
-      <Route path="/profile" exact component={Profile} />
-      <Route path="/" exact component={Welcome} />
-      <Route path="/welcomeadmin" exact component={Welcomeadmin} />
-      {/* add redirect for first page */}
-      <Redirect from="*" to="/" />
-    </Switch>
-  </BrowserRouter>,
+  <LanguageProvider>
+    <BrowserRouter>
+      <Switch>
+        {/* add routes with layouts */}
+        <Route path="/admin" component={Admin} />
+        <Route path="/auth" component={Auth} />
+        {/* add routes without layouts */}
+        <Route path="/landing" exact component={Landing} />
+        <Route path="/profile" exact component={Profile} />
+        <Route path="/" exact component={Welcome} />
+        
+        {/* add redirect for first page */}
+        <Redirect from="*" to="/" />
+      </Switch>
+    </BrowserRouter>
+  </LanguageProvider>,
   document.getElementById("root")
 );
