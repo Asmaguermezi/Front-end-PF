@@ -3,10 +3,11 @@ import { Link, useHistory } from "react-router-dom";
 import { LanguageContext } from "../../context/LanguageContext";
 import { translations } from "../../i18n/translations";
 import { loginUtilisateur } from "../../services/ApiUser";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const { lang } = useContext(LanguageContext);
-  const history = useHistory(); // ✅ v5 = useHistory
+  const history = useHistory();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,13 +17,14 @@ export default function Login() {
     e.preventDefault();
     try {
       const response = await loginUtilisateur({ email, password });
-      alert("✅ Connexion réussie !");
+
+      toast.success("✅ Connexion réussie !");
       localStorage.setItem("token", response.data.token);
 
-      // ✅ Rediriger après connexion
-      history.push("/dashboard"); // ⬅️ change cette route si besoin
+      // ✅ Redirection vers l'interface principale
+      history.push("/landing");
     } catch (error) {
-      alert("❌ Email ou mot de passe incorrect.");
+      toast.error("❌ Email ou mot de passe incorrect.");
       console.error(error.response?.data?.message || error.message);
     }
   };
@@ -92,7 +94,9 @@ export default function Login() {
                   <button
                     type="submit"
                     className="w-full text-white font-semibold rounded-lg py-3 shadow-md focus:outline-none transition-all duration-150 text-base"
-                    style={{ background: "linear-gradient(to bottom, #635bfa 0%, #6d38a7 100%)" }}
+                    style={{
+                      background: "linear-gradient(to bottom, #635bfa 0%, #6d38a7 100%)",
+                    }}
                   >
                     {translations[lang].login}
                   </button>
@@ -101,7 +105,7 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Bas de page */}
+          {/* Liens bas */}
           <div className="flex flex-wrap mt-6 relative">
             <div className="w-1/2">
               <Link to="/auth/forget" className="text-lightBlue-500">

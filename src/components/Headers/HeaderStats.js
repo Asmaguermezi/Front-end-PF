@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 // components
-
 import CardStats from "components/Cards/CardStats.js";
 
 export default function HeaderStats() {
+  const [stats, setStats] = useState({
+    utilisateurs: 0,
+    enseignants: 0,
+    etudiants: 0,
+    matieres: 0,
+  });
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/stats");
+      setStats(res.data);
+    } catch (error) {
+      console.error("Erreur de récupération des stats :", error);
+    }
+  };
+
   return (
     <>
       {/* Header */}
@@ -15,49 +35,52 @@ export default function HeaderStats() {
             <div className="flex flex-wrap">
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="TRAFFIC"
-                  statTitle="350,897"
+                  statSubtitle="Utilisateurs"
+                  statTitle={stats.utilisateurs.toString()}
                   statArrow="up"
-                  statPercent="3.48"
+                  statPercent="100"
                   statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
-                  statIconName="far fa-chart-bar"
+                  statDescripiron="Total utilisateurs"
+                  statIconName="fas fa-users"
                   statIconColor="bg-red-500"
                 />
               </div>
+
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="NEW USERS"
-                  statTitle="2,356"
-                  statArrow="down"
-                  statPercent="3.48"
-                  statPercentColor="text-red-500"
-                  statDescripiron="Since last week"
-                  statIconName="fas fa-chart-pie"
+                  statSubtitle="Enseignants"
+                  statTitle={stats.enseignants.toString()}
+                  statArrow="up"
+                  statPercent="100"
+                  statPercentColor="text-emerald-500"
+                  statDescripiron="Total enseignants"
+                  statIconName="fas fa-chalkboard-teacher"
                   statIconColor="bg-orange-500"
                 />
               </div>
+
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="SALES"
-                  statTitle="924"
-                  statArrow="down"
-                  statPercent="1.10"
-                  statPercentColor="text-orange-500"
-                  statDescripiron="Since yesterday"
-                  statIconName="fas fa-users"
+                  statSubtitle="Étudiants"
+                  statTitle={stats.etudiants.toString()}
+                  statArrow="up"
+                  statPercent="100"
+                  statPercentColor="text-emerald-500"
+                  statDescripiron="Total étudiants"
+                  statIconName="fas fa-user-graduate"
                   statIconColor="bg-pink-500"
                 />
               </div>
+
               <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
                 <CardStats
-                  statSubtitle="PERFORMANCE"
-                  statTitle="49,65%"
+                  statSubtitle="Matières"
+                  statTitle={stats.matieres.toString()}
                   statArrow="up"
-                  statPercent="12"
+                  statPercent="100"
                   statPercentColor="text-emerald-500"
-                  statDescripiron="Since last month"
-                  statIconName="fas fa-percent"
+                  statDescripiron="Total matières"
+                  statIconName="fas fa-book"
                   statIconColor="bg-lightBlue-500"
                 />
               </div>

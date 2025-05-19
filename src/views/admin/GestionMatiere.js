@@ -11,6 +11,7 @@ export default function GestionMatiere() {
   const [nouvelleMatiere, setNouvelleMatiere] = useState({
     nom: "",
     description: "",
+    icone: "", // 🆕 Champ icône
   });
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function GestionMatiere() {
   const handleAjouterMatiere = async () => {
     try {
       await ajouterMatiere(nouvelleMatiere);
-      setNouvelleMatiere({ nom: "", description: "" });
+      setNouvelleMatiere({ nom: "", description: "", icone: "" });
       fetchMatieres();
     } catch (err) {
       console.error(err);
@@ -44,7 +45,7 @@ export default function GestionMatiere() {
   const handleModifierMatiere = async (id) => {
     try {
       await updateMatiere(id, nouvelleMatiere);
-      setNouvelleMatiere({ nom: "", description: "" });
+      setNouvelleMatiere({ nom: "", description: "", icone: "" });
       fetchMatieres();
     } catch (err) {
       console.error(err);
@@ -68,22 +69,22 @@ export default function GestionMatiere() {
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-blue-700">Gestion des Matières</h2>
 
+      {/* Formulaire */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <input
           name="nom"
           value={nouvelleMatiere.nom}
           placeholder="Nom de la matière"
           onChange={handleChange}
-          className="border rounded px-4 py-2 w-full md:w-1/3 shadow-sm"
+          className="border rounded px-4 py-2 w-full md:w-1/4 shadow-sm"
         />
         <input
           name="description"
           value={nouvelleMatiere.description}
           placeholder="Description"
           onChange={handleChange}
-          className="border rounded px-4 py-2 w-full md:w-2/3 shadow-sm"
+          className="border rounded px-4 py-2 w-full md:w-2/4 shadow-sm"
         />
-
         <button
           onClick={
             nouvelleMatiere._id
@@ -96,6 +97,7 @@ export default function GestionMatiere() {
         </button>
       </div>
 
+      {/* Tableau des matières */}
       <table className="w-full table-auto border border-collapse shadow">
         <thead>
           <tr className="bg-blue-100 text-blue-800 text-left">

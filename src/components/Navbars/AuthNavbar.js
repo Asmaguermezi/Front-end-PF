@@ -64,7 +64,7 @@ const translations = {
   }
 };
 
-export default function Navbar(props) {
+export default function AuthNavbar(props) {
   const { lang, setLang } = useContext(LanguageContext);
   const [navbarOpen, setNavbarOpen] = React.useState(false);
 

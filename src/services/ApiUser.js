@@ -1,7 +1,21 @@
 import axios from "axios";
 
-// Définir une base générale
+// ✅ 1. Base URL du backend
 axios.defaults.baseURL = "http://localhost:5000";
+
+// ✅ 2. Intercepteur : ajouter le token automatiquement dans chaque requête
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token"); // 🔐 Récupérer le token stocké après login
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// ✅ 3. Toutes les fonctions d'appel API
 
 const API_BASE = "/api/users";
 
@@ -20,7 +34,7 @@ export const logoutUtilisateur = () => {
   return axios.get(`${API_BASE}/logout`);
 };
 
-// 👥 Récupérer tous les utilisateurs
+// 👥 Récupérer tous les utilisateurs (protégée)
 export const getAllUtilisateurs = () => {
   return axios.get(`${API_BASE}/getAllUtilisateurs`);
 };
@@ -68,4 +82,9 @@ export const updateUtilisateurAvecImage = (id, formData) => {
       "Content-Type": "multipart/form-data",
     },
   });
+};
+
+// 🔑 Réinitialisation du mot de passe
+export const resetPassword = (email) => {
+  return axios.post(`${API_BASE}/reset-password`, { email });
 };
