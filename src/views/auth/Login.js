@@ -95,8 +95,9 @@ export default function Login() {
                     type="submit"
                     className="w-full text-white font-semibold rounded-lg py-3 shadow-md focus:outline-none transition-all duration-150 text-base"
                     style={{
-                      background: "linear-gradient(to bottom, #635bfa 0%, #6d38a7 100%)",
+                      background: "linear-gradient(to right, #43cea2, #185a9d)",
                     }}
+                  
                   >
                     {translations[lang].login}
                   </button>

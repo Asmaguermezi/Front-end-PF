@@ -6,8 +6,8 @@ export default function FooterSmall(props) {
       <footer
         className={
           (props.absolute
-            ? "absolute w-full bottom-0 bg-gradient-to-b from-purple-500 to-purple-700"
-            : "relative bg-gradient-to-b from-purple-500 to-purple-700") + " pb-6"
+            ? "absolute w-full bottom-0 bg-gradient-to-b from-blue-400 to-blue-700"
+            : "relative bg-gradient-to-b from-blue-400 to-blue-700") + " pb-6"
         }
       >
         <div className="container mx-auto px-4">

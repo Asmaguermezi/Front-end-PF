@@ -21,8 +21,9 @@ export default function Auth() {
           <div
             className="absolute top-0 w-full h-full"
             style={{
-              background: 'linear-gradient(to bottom, #635bfa 0%, #6d38a7 100%)'
+              background: "linear-gradient(to right, #43cea2, #185a9d)",
             }}
+          
           ></div>
           <Switch>
           <Route path="/auth/login" exact component={Login} />

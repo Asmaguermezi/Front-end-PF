@@ -50,9 +50,10 @@ export default function Register() {
     <div
       className="min-h-screen flex items-center justify-center"
       style={{
-        background: "linear-gradient(180deg, #6C63FF 0%, #6D38A7 100%)"
+        background: "linear-gradient(to right, #43cea2, #185a9d)",
       }}
     >
+    
       <div className="container mx-auto px-4 h-full">
         <div className="flex content-center items-center justify-center h-full">
           <div className="w-full lg:w-6/12 px-4">
@@ -184,8 +185,9 @@ export default function Register() {
                       type="submit"
                       className="w-full text-white font-semibold rounded-lg py-3 shadow-md focus:outline-none transition-all duration-150 text-base"
                       style={{
-                        background: "linear-gradient(180deg, #6C63FF 0%, #6D38A7 100%)"
+                        background: "linear-gradient(to right, #43cea2, #185a9d)",
                       }}
+                    
                     >
                       {translations[lang].create}
                     </button>
