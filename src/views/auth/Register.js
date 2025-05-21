@@ -4,6 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { LanguageContext } from "../../context/LanguageContext";
 import { translations } from "../../i18n/translations";
 import { inscriptionUtilisateur } from "../../services/ApiUser";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const { lang } = useContext(LanguageContext);
@@ -21,27 +22,24 @@ export default function Register() {
     e.preventDefault();
 
     if (!accepteConfidentialite) {
-      alert("❌ Tu dois accepter la politique de confidentialité.");
+      toast.error("❌ Tu dois accepter la politique de confidentialité.");
       return;
     }
 
     if (password.length < 6) {
-      alert("❌ Le mot de passe doit contenir au moins 6 caractères.");
+      toast.error("❌ Le mot de passe doit contenir au moins 6 caractères.");
       return;
     }
 
-    // Met la première lettre du rôle en majuscule
     const formattedRole = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
-
     const userData = { name, email, password, role: formattedRole, specialite };
 
     try {
-      const response = await inscriptionUtilisateur(userData);
-      console.log(response.data);
-      alert("✅ Inscription réussie !");
+      await inscriptionUtilisateur(userData); // API avec withCredentials côté backend
+      toast.success("✅ Inscription réussie !");
       history.push("/auth/login");
     } catch (error) {
-      alert("❌ Une erreur s'est produite lors de l'inscription.");
+      toast.error("❌ Une erreur s'est produite lors de l'inscription.");
       console.error(error.response?.data || error.message);
     }
   };
@@ -49,11 +47,8 @@ export default function Register() {
   return (
     <div
       className="min-h-screen flex items-center justify-center"
-      style={{
-        background: "linear-gradient(to right, #43cea2, #185a9d)",
-      }}
+      style={{ background: "linear-gradient(to right, #43cea2, #185a9d)" }}
     >
-    
       <div className="container mx-auto px-4 h-full">
         <div className="flex content-center items-center justify-center h-full">
           <div className="w-full lg:w-6/12 px-4">
@@ -136,7 +131,8 @@ export default function Register() {
                         role ? "text-black" : "text-gray-400"
                       }`}
                     >
-                      <option value="" disabled>
+                     
+                     <option value="" disabled>
                         {translations[lang].chooseRole}
                       </option>
                       <option value="etudiant">{translations[lang].etudiant}</option>
@@ -179,7 +175,7 @@ export default function Register() {
                     </label>
                   </div>
 
-                  {/* Bouton */}
+                  {/* Bouton d'inscription */}
                   <div className="text-center mt-6">
                     <button
                       type="submit"
@@ -187,7 +183,6 @@ export default function Register() {
                       style={{
                         background: "linear-gradient(to right, #43cea2, #185a9d)",
                       }}
-                    
                     >
                       {translations[lang].create}
                     </button>
@@ -207,8 +202,8 @@ export default function Register() {
                     </Link>
                   </div>
                 </div>
-              </div>
-            </div>
+              </div> {/* end .flex-auto */}
+            </div> {/* end .card */}
           </div>
         </div>
       </div>

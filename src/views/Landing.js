@@ -6,6 +6,22 @@ import Footer from "components/Footers/Footer.js";
 
 export default function Landing() {
   const [matieres, setMatieres] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const totalPages = Math.ceil(matieres.length / itemsPerPage);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentMatieres = matieres.slice(indexOfFirstItem, indexOfLastItem);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
 
   useEffect(() => {
     getAllMatieres()
@@ -83,8 +99,8 @@ export default function Landing() {
         <section className="pb-20 bg-blueGray-200 -mt-24">
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap justify-center">
-              {matieres.length > 0 ? (
-                matieres.map((matiere, index) => (
+              {currentMatieres.length > 0 ? (
+                currentMatieres.map((matiere, index) => (
                   <Link
                     key={index}
                     to={`/matiere/${matiere._id}`}
@@ -107,6 +123,28 @@ export default function Landing() {
                 </p>
               )}
             </div>
+            {/* Pagination */}
+            {matieres.length > itemsPerPage && (
+              <div className="flex justify-center items-center mt-8 gap-4">
+                <button
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                  className={`px-4 py-2 rounded bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50`}
+                >
+                  &lt;
+                </button>
+                <span className="text-lg text-blueGray-700 mx-2">
+                  {currentPage} sur {totalPages}
+                </span>
+                <button
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages}
+                  className={`px-4 py-2 rounded bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50`}
+                >
+                  &gt;
+                </button>
+              </div>
+            )}
           </div>
         </section>
       </main>

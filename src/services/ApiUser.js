@@ -3,67 +3,68 @@ import axios from "axios";
 // ✅ 1. Base URL du backend
 axios.defaults.baseURL = "http://localhost:5000";
 
-// ✅ 2. Intercepteur : ajouter le token automatiquement dans chaque requête
+// ✅ 2. Intercepteur (inutile ici car on utilise les cookies, pas le header)
 axios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token"); // 🔐 Récupérer le token stocké après login
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
+  (config) => config,
   (error) => Promise.reject(error)
 );
 
 // ✅ 3. Toutes les fonctions d'appel API
-
 const API_BASE = "/api/users";
-
-// 📥 Inscription
 export const inscriptionUtilisateur = (userData) => {
-  return axios.post(`${API_BASE}/inscription`, userData);
+  return axios.post("/api/users/inscription", userData, { withCredentials: true, // ✅ AJOUTE ça pour que le cookie fonctionne juste après inscription
+  });
 };
 
-// 🔐 Connexion
-export const loginUtilisateur = (credentials) => {
-  return axios.post(`${API_BASE}/login`, credentials);
+// 🔐 Connexion (le backend va stocker le cookie)
+export const loginUtilisateur = (credentials, config = {}) => {
+  return axios.post("/api/users/login", credentials, {
+    withCredentials: true, // 🔐 Obligatoire pour les cookies
+    ...config,
+  });
 };
 
-// 🔓 Déconnexion
+
+// 🔓 Déconnexion (le cookie sera supprimé côté backend)
 export const logoutUtilisateur = () => {
-  return axios.get(`${API_BASE}/logout`);
+  return axios.get(`${API_BASE}/logout`, { withCredentials: true });
 };
 
 // 👥 Récupérer tous les utilisateurs (protégée)
 export const getAllUtilisateurs = () => {
-  return axios.get(`${API_BASE}/getAllUtilisateurs`);
+  return axios.get(`${API_BASE}/getAllUtilisateurs`, { withCredentials: true });
 };
 
 // 👤 Par ID
 export const getUtilisateurParId = (id) => {
-  return axios.get(`${API_BASE}/getUtilisateurById/${id}`);
+  return axios.get(`${API_BASE}/getUtilisateurById/${id}`, { withCredentials: true });
 };
 
 // 🔍 Par nom
 export const searchUtilisateurByNom = (nom) => {
   return axios.get(`${API_BASE}/searchUtilisateurByNom`, {
     params: { nom },
+    withCredentials: true,
   });
 };
 
 // 🔍 Par rôle
 export const listeUtilisateursParRole = (role) => {
-  return axios.get(`${API_BASE}/getUtilisateursParRole/${role}`);
+  return axios.get(`${API_BASE}/getUtilisateursParRole/${role}`, { withCredentials: true });
 };
 
 // ✏️ Mise à jour
 export const updateUtilisateur = (id, userData) => {
-  return axios.put(`${API_BASE}/updateUtilisateurById/${id}`, userData);
+  return axios.put(`${API_BASE}/updateUtilisateurById/${id}`, userData, {
+    withCredentials: true,
+  });
 };
 
 // ❌ Suppression
 export const supprimerUtilisateur = (id) => {
-  return axios.delete(`${API_BASE}/deleteUtilisateurById/${id}`);
+  return axios.delete(`${API_BASE}/deleteUtilisateurById/${id}`, {
+    withCredentials: true,
+  });
 };
 
 // 📷 Inscription avec image
@@ -72,19 +73,25 @@ export const inscriptionUtilisateurAvecImage = (formData) => {
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    withCredentials: true,
   });
 };
 
 // 📷 Mise à jour avec image
-export const updateUtilisateurAvecImage = (id, formData) => {
-  return axios.put(`${API_BASE}/updateUtilisateurAvecImage/${id}`, formData, {
+export const updateUtilisateurAvecImage = (id, formData) =>
+  axios.put(`${API_BASE}/updateUtilisateurAvecImage/${id}`, formData, {
+    withCredentials: true,
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
-};
 
 // 🔑 Réinitialisation du mot de passe
 export const resetPassword = (email) => {
   return axios.post(`${API_BASE}/reset-password`, { email });
+};
+export const getMonProfil = () => {
+  return axios.get("/api/users/getMonProfil", {
+    withCredentials: true, // ✅ IMPORTANT pour envoyer le cookie
+  });
 };

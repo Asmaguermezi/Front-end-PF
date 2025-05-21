@@ -16,10 +16,11 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await loginUtilisateur({ email, password });
+      // 🔐 Envoi du login avec withCredentials pour stocker le cookie
+      const response = await loginUtilisateur({ email, password }, { withCredentials: true });
+
 
       toast.success("✅ Connexion réussie !");
-      localStorage.setItem("token", response.data.token);
 
       // ✅ Redirection vers l'interface principale
       history.push("/landing");
@@ -97,7 +98,6 @@ export default function Login() {
                     style={{
                       background: "linear-gradient(to right, #43cea2, #185a9d)",
                     }}
-                  
                   >
                     {translations[lang].login}
                   </button>

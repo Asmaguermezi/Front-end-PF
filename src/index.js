@@ -16,8 +16,8 @@ import Auth from "layouts/Auth.js";
 import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 import Welcome from "views/Welcome.js";
-import MatierePage from "views/MatierePage";
-import VideoCall from "views/VideoCall";
+import MatierePage from "views/MatierePage.js";
+import VideoCall from "views/VideoCall.js";
 
 import { LanguageProvider } from "./context/LanguageContext";
 
@@ -26,19 +26,22 @@ ReactDOM.render(
     <BrowserRouter>
       <>
         <Switch>
-          {/* add routes with layouts */}
+          {/* Layouts */}
           <Route path="/admin" component={Admin} />
           <Route path="/auth" component={Auth} />
-          {/* add routes without layouts */}
+
+          {/* Pages sans layout */}
           <Route path="/landing" exact component={Landing} />
           <Route path="/profile" exact component={Profile} />
           <Route path="/matiere/:id" exact component={MatierePage} />
-          <Route path="/video-call" exact component={VideoCall} />
+          <Route path="/video-call/:sessionId" exact component={VideoCall} /> {/* ✅ Correction ici */}
           <Route path="/" exact component={Welcome} />
-          {/* add redirect for first page */}
+
+          {/* Redirection */}
           <Redirect from="*" to="/" />
         </Switch>
-        {/* ✅ Container pour afficher les toasts globalement */}
+
+        {/* Notifications globales */}
         <ToastContainer position="top-right" autoClose={3000} />
       </>
     </BrowserRouter>

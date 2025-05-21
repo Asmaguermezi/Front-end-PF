@@ -170,7 +170,7 @@ export default function CardTable({ color }) {
           </select>
           <button
             onClick={AddNewUser}
-            className="bg-yellow-400 text-black px-4 py-2 rounded"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white px-2 py-1 rounded"
           >
             Ajouter
           </button>

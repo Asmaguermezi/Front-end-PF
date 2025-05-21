@@ -101,28 +101,32 @@ export default function Sidebar() {
                 </Link>
               </li>
 
-              {/* Settings */}
+              {/*
+              Lien vers la page Settings - TEMPORAIREMENT DÉSACTIVÉ
+              Met en évidence le lien si l'URL actuelle correspond à /admin/settings
               <li className="items-center">
                 <Link
                   className={
                     "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/settings") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
+                    (window.location.href.indexOf("/admin/settings") !== -1 // Vérifie si la page active est Settings
+                      ? "text-lightBlue-500 hover:text-lightBlue-600" // Style pour lien actif
+                      : "text-blueGray-700 hover:text-blueGray-500") // Style pour lien inactif
                   }
-                  to="/admin/settings"
+                  to="/admin/settings" // Chemin de navigation vers la page Settings
                 >
+                  Icône pour le lien Settings
                   <i
                     className={
-                      "fas fa-tools mr-2 text-sm " +
+                      "fas fa-tools mr-2 text-sm " + // Classes de base pour l'icône
                       (window.location.href.indexOf("/admin/settings") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
+                        ? "opacity-75" // Style pour icône active
+                        : "text-blueGray-300") // Style pour icône inactive
                     }
                   ></i>{" "}
-                  Settings
+                  Settings {/* Texte du lien * /}
                 </Link>
               </li>
+              */}
 
               {/* Tables */}
               <li className="items-center">
@@ -167,6 +171,29 @@ export default function Sidebar() {
                     }
                   ></i>{" "}
                   Gestion Matière
+                </Link>
+              </li>
+
+              {/* Gestion Étude */}
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/gestion-etude") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/gestion-etude"
+                >
+                  <i
+                    className={
+                      "fas fa-book mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/gestion-etude") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Gestion Étude
                 </Link>
               </li>
             </ul>

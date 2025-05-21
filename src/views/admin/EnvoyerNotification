@@ -1,0 +1,77 @@
+import React, { useState, useEffect } from "react";
+import { getAllSessions } from "../../services/ApiSessionEtude";
+import { ajouterNotification } from "../../services/ApiNotification";
+
+export default function EnvoyerNotification() {
+  const [titre, setTitre] = useState("Invitation à une visio 📢");
+  const [contenu, setContenu] = useState("");
+  const [sessionId, setSessionId] = useState("");
+  const [sessions, setSessions] = useState([]);
+
+  useEffect(() => {
+    getAllSessions()
+      .then(setSessions)
+      .catch((err) => console.error("Erreur chargement sessions :", err));
+  }, []);
+
+  const handleEnvoyer = async () => {
+    if (!sessionId || !contenu) {
+      alert("Veuillez remplir le contenu et choisir une session.");
+      return;
+    }
+
+    const lien = `/videocall/${sessionId}`;
+    const notificationData = {
+      titre,
+      contenu,
+      lien,
+      destinataire: null, // ou "all"
+    };
+
+    try {
+      await ajouterNotification(notificationData);
+      alert("✅ Notification envoyée !");
+      setContenu("");
+      setSessionId("");
+    } catch (err) {
+      alert("❌ Erreur lors de l’envoi");
+      console.error(err.message);
+    }
+  };
+
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold text-blue-700 mb-4">Envoyer une notification visio</h2>
+
+      <div className="flex flex-col gap-4 max-w-xl">
+        <select
+          value={sessionId}
+          onChange={(e) => setSessionId(e.target.value)}
+          className="border rounded px-4 py-2"
+        >
+          <option value="">-- Choisir une session d’étude --</option>
+          {sessions.map((s) => (
+            <option key={s._id} value={s._id}>
+              {s.date} à {s.heure}
+            </option>
+          ))}
+        </select>
+
+        <textarea
+          placeholder="Contenu du message"
+          value={contenu}
+          onChange={(e) => setContenu(e.target.value)}
+          rows={4}
+          className="border rounded px-4 py-2"
+        />
+
+        <button
+          onClick={handleEnvoyer}
+          className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded shadow"
+        >
+          📤 Envoyer la notification
+        </button>
+      </div>
+    </div>
+  );
+}
