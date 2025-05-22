@@ -37,11 +37,11 @@ export default function Forget() {
       className="min-h-screen flex items-center justify-center px-4"
       style={{
         background: "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)",
-        paddingTop: "20px",
-        paddingBottom: "60px",
+        paddingTop: "0px",
+        paddingBottom: "80px",
       }}
     >
-      <div className="container mx-auto px-4 h-full" style={{ marginTop: "-80px" }}>
+      <div className="container mx-auto px-4 h-full" style={{ marginTop: "-140px" }}>
         <div className="flex content-center items-center justify-center h-full">
           <div className="w-full lg:w-4/12 px-4">
             <motion.div
