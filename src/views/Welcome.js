@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../assets/styles/Welcome.css';
 import elearningImage from '../assets/img/creer-site-e-learning-740x416.jpg';
-
+import Navbar from "components/Navbars/IndexNavbar.js";
 const Welcome = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [courses, setCourses] = useState([

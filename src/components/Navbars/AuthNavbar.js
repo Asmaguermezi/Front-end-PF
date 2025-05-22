@@ -82,9 +82,9 @@ export default function AuthNavbar(props) {
           <div className="w-full relative flex items-center">
             <Link
               style={logoStyle}
-              className="text-4xl md:text-6xl font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap"
+              className="text-4xl md:text-6xl font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap "
               to="/"
-            >
+            > 
               Etudia
             </Link>
             <div className="ml-auto">
@@ -94,9 +94,9 @@ export default function AuthNavbar(props) {
                 className="bg-white text-purple-700 font-bold rounded-lg px-4 py-2 shadow border border-purple-200 focus:outline-none focus:ring focus:border-purple-400 transition"
                 style={{ minWidth: 100, fontSize: '1.1rem' }}
               >
-                <option value="fr">🇫🇷 Français</option>
-                <option value="en">🇬🇧 English</option>
-                <option value="ar">🇩🇿 العربية</option>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
               </select>
             </div>
           </div>
