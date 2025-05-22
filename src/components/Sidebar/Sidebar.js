@@ -196,6 +196,31 @@ export default function Sidebar() {
                   Gestion Étude
                 </Link>
               </li>
+
+              {/* Envoyer Notification */}
+              {/*
+              <li className="items-center">
+                <Link
+                  className={
+                    "text-xs uppercase py-3 font-bold block " +
+                    (window.location.href.indexOf("/admin/notifier") !== -1
+                      ? "text-lightBlue-500 hover:text-lightBlue-600"
+                      : "text-blueGray-700 hover:text-blueGray-500")
+                  }
+                  to="/admin/notifier"
+                >
+                  <i
+                    className={
+                      "fas fa-bell mr-2 text-sm " +
+                      (window.location.href.indexOf("/admin/notifier") !== -1
+                        ? "opacity-75"
+                        : "text-blueGray-300")
+                    }
+                  ></i>{" "}
+                  Envoyer Notification
+                </Link>
+              </li>
+              */}
             </ul>
 
             {/* Divider */}

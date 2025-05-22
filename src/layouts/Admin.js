@@ -14,6 +14,8 @@ import Settings from "views/admin/Settings.js";
 import Tables from "views/admin/Tables.js";
 import GestionMatiere from "views/admin/GestionMatiere.js";
 import GestionEtude from "views/admin/GestionEtude.js";
+import EnvoyerNotification from "views/admin/EnvoyerNotification";
+
 export default function Admin() {
   return (
     <>
@@ -31,7 +33,7 @@ export default function Admin() {
             <Route path="/admin/tables" exact component={Tables} />
             <Route path="/admin/gestion-matiere" exact component={GestionMatiere} />
             <Route path="/admin/gestion-etude" exact component={GestionEtude} />
-
+            <Route path="/admin/notifier" exact component={EnvoyerNotification} />
             <Redirect from="/admin" to="/admin/dashboard" />
           </Switch>
         </div>

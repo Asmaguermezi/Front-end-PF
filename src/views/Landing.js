@@ -9,8 +9,10 @@ export default function Landing() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  const totalPages = Math.ceil(matieres.length / itemsPerPage);
+  // ✅ Optionnel : détecter le rôle (utilisateur ou enseignant)
+  const role = localStorage.getItem("role") || "etudiant"; // fallback si vide
 
+  const totalPages = Math.ceil(matieres.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentMatieres = matieres.slice(indexOfFirstItem, indexOfLastItem);
@@ -27,18 +29,6 @@ export default function Landing() {
     getAllMatieres()
       .then((res) => setMatieres(res.data))
       .catch((err) => console.error("❌ Erreur chargement matières :", err));
-
-    return matieres.map((matiere) => (
-      <div key={matiere._id} className="text-center">
-        <div className="text-3xl mb-3">
-          {matiere.icone?.startsWith("http") ? (
-            <img src={matiere.icone} alt="icone" className="w-12 h-12 mx-auto" />
-          ) : (
-            <span>{matiere.icone}</span>
-          )}
-        </div>
-      </div>
-    ));
   }, []);
 
   return (
@@ -70,6 +60,16 @@ export default function Landing() {
                     Accédez à l'ensemble des matières proposées sur la plateforme
                     pour progresser à votre rythme.
                   </p>
+
+                  {/* ✅ Bouton vers la page notifications */}
+                  <div className="mt-6">
+                    <Link
+                      to={`/${role}/notifications`}
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition duration-300"
+                    >
+                      📬 Voir mes notifications
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -111,8 +111,12 @@ export default function Landing() {
                         <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-indigo-500">
                           <i className="fas fa-book-open"></i>
                         </div>
-                        <h6 className="text-xl font-semibold capitalize">{matiere.nom}</h6>
-                        <p className="mt-2 mb-4 text-blueGray-500">{matiere.description}</p>
+                        <h6 className="text-xl font-semibold capitalize">
+                          {matiere.nom}
+                        </h6>
+                        <p className="mt-2 mb-4 text-blueGray-500">
+                          {matiere.description}
+                        </p>
                       </div>
                     </div>
                   </Link>
@@ -123,13 +127,14 @@ export default function Landing() {
                 </p>
               )}
             </div>
+
             {/* Pagination */}
             {matieres.length > itemsPerPage && (
               <div className="flex justify-center items-center mt-8 gap-4">
                 <button
                   onClick={prevPage}
                   disabled={currentPage === 1}
-                  className={`px-4 py-2 rounded bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50`}
+                  className="px-4 py-2 rounded bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50"
                 >
                   &lt;
                 </button>
@@ -139,7 +144,7 @@ export default function Landing() {
                 <button
                   onClick={nextPage}
                   disabled={currentPage === totalPages}
-                  className={`px-4 py-2 rounded bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50`}
+                  className="px-4 py-2 rounded bg-indigo-500 text-white hover:bg-indigo-600 disabled:opacity-50"
                 >
                   &gt;
                 </button>

@@ -18,6 +18,7 @@ import Profile from "views/Profile.js";
 import Welcome from "views/Welcome.js";
 import MatierePage from "views/MatierePage.js";
 import VideoCall from "views/VideoCall.js";
+import Notifications from "views/etudiant/Notifications";
 
 import { LanguageProvider } from "./context/LanguageContext";
 
@@ -34,10 +35,11 @@ ReactDOM.render(
           <Route path="/landing" exact component={Landing} />
           <Route path="/profile" exact component={Profile} />
           <Route path="/matiere/:id" exact component={MatierePage} />
-          <Route path="/video-call/:sessionId" exact component={VideoCall} /> {/* ✅ Correction ici */}
+          <Route path="/videocall/:id" exact component={VideoCall} /> {/* ✅ corrigé ici */}
+          <Route path="/etudiant/notifications" exact component={Notifications} />
           <Route path="/" exact component={Welcome} />
 
-          {/* Redirection */}
+          {/* Redirection par défaut */}
           <Redirect from="*" to="/" />
         </Switch>
 

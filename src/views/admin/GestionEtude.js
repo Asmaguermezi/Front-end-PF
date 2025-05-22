@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import {
   getAllSessions,
   addSession,
   updateSession,
   deleteSessionById,
 } from "../../services/ApiSessionEtude.js";
-import { ajouterNotification } from "../../services/ApiNotification.js"; // ✅ Assure-toi que le chemin est correct
+import { ajouterNotification } from "../../services/ApiNotification.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function GestionSessionEtude() {
   const [sessions, setSessions] = useState([]);
@@ -26,6 +27,7 @@ export default function GestionSessionEtude() {
       setSessions(res);
     } catch (err) {
       console.error("Erreur de chargement des sessions", err);
+      toast.error("❌ Erreur lors du chargement des sessions");
     }
   };
 
@@ -39,8 +41,10 @@ export default function GestionSessionEtude() {
       await addSession(nouvelleSession);
       setNouvelleSession({ date: "", heure: "" });
       fetchSessions();
+      toast.success("✅ Session ajoutée !");
     } catch (err) {
       console.error(err);
+      toast.error("❌ Erreur lors de l'ajout");
     }
   };
 
@@ -49,8 +53,10 @@ export default function GestionSessionEtude() {
       await updateSession(id, nouvelleSession);
       setNouvelleSession({ date: "", heure: "" });
       fetchSessions();
+      toast.success("✏️ Session modifiée !");
     } catch (err) {
       console.error(err);
+      toast.error("❌ Erreur lors de la modification");
     }
   };
 
@@ -58,8 +64,10 @@ export default function GestionSessionEtude() {
     try {
       await deleteSessionById(id);
       fetchSessions();
+      toast.success("🗑️ Session supprimée !");
     } catch (err) {
       console.error(err);
+      toast.error("❌ Erreur lors de la suppression");
     }
   };
 
@@ -69,23 +77,23 @@ export default function GestionSessionEtude() {
 
   const handleCopierID = (id) => {
     navigator.clipboard.writeText(id);
-    alert("✅ ID copié dans le presse-papiers !");
+    toast.success("✅ ID copié dans le presse-papiers !");
   };
 
   const handleEnvoyerNotification = async (session) => {
     try {
       const notificationData = {
-        titre: "Nouvelle session d'étude disponible ��",
+        titre: "Nouvelle session d'étude disponible 📚",
         contenu: `Une session est prévue le ${session.date} à ${session.heure}. Cliquez ici pour rejoindre.`,
-        lien: `/videocall/${session._id}`,
-        destinataire: null, // ou "all" si c'est global
+        sessionId: session._id, // ✅ Le lien est généré automatiquement côté frontend
+        destinataire: null, // ou un ID utilisateur spécifique
       };
 
       await ajouterNotification(notificationData);
-      alert("✅ Notification envoyée avec succès !");
+      toast.success("✅ Notification envoyée avec succès !");
     } catch (err) {
       console.error("Erreur lors de l'envoi de la notification :", err.message);
-      alert("❌ Échec de l'envoi de la notification.");
+      toast.error("❌ Échec de l'envoi de la notification.");
     }
   };
 
@@ -136,7 +144,9 @@ export default function GestionSessionEtude() {
         <tbody>
           {sessions.map((session) => (
             <tr key={session._id} className="hover:bg-gray-50">
-              <td className="p-3 border text-sm text-gray-600">{session._id}</td>
+              <td className="p-3 border text-sm text-gray-600">
+                {session._id}
+              </td>
               <td className="p-3 border">{session.date}</td>
               <td className="p-3 border">{session.heure}</td>
               <td className="p-3 border space-x-2">
@@ -152,13 +162,6 @@ export default function GestionSessionEtude() {
                 >
                   Supprimer
                 </button>
-                
-                <Link
-                  to={`/videocall/${session._id}`}
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white px-2 py-1 rounded"
-                >
-                  Rejoindre
-                </Link>
                 <button
                   onClick={() => handleEnvoyerNotification(session)}
                   className="bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded"
@@ -170,6 +173,8 @@ export default function GestionSessionEtude() {
           ))}
         </tbody>
       </table>
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 }

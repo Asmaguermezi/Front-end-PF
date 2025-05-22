@@ -11,7 +11,7 @@
     "autoprefixer": "10.2.5",
     "axios": "^1.9.0",
     "chart.js": "^2.9.4",
-    "framer-motion": "^7.6.15",
+    "framer-motion": "^4.1.17",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.8",
     "lucide-react": "^0.510.0",
