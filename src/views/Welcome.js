@@ -146,7 +146,7 @@ const Welcome = () => {
           <div className="feature-card">
             <div className="feature-icon">
               <i className="fas fa-user-graduate"></i>
-            </div>
+          </div>
             <h3>Instructeurs experts</h3>
             <p>Apprenez avec des professionnels du secteur</p>
           </div>
