@@ -1,113 +1,134 @@
 // ✅ Welcome.js fusionné avec contenu dynamique (services, cours, témoignages)
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import IndexNavbar from "components/Navbars/IndexNavbar.js";
-import Footer from "components/Footers/Footer.js";
-
-
-const PHRASES = [
-  "Ta plateforme e-learning : révise avec d'autres étudiants, trouve un enseignant, et booste ta réussite !",
-  "Réussis tes examens avec notre communauté d'apprentissage collaborative et interactive !",
-  "Développe tes compétences à ton rythme avec des enseignants experts dans leur domaine !",
-  "Rejoins des groupes d'études et partage tes connaissances avec d'autres passionnés !"
-];
-
-const COLOR_PALETTES = [
-  { from: "#43cea2", to: "#185a9d" },
- 
-  { from: "#4776E6", to: "#8E54E9" },
- 
-  { from: "#348F50", to: "#56B4D3" }
-];
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import '../assets/styles/Welcome.css';
+import elearningImage from '../assets/img/creer-site-e-learning-740x416.jpg';
 
 const Welcome = () => {
-  const [displayText, setDisplayText] = useState("");
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [isTyping, setIsTyping] = useState(true);
-  const typingRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [courses, setCourses] = useState([
+    {
+      id: 1,
+      title: "Développement Web",
+      description: "Apprenez HTML, CSS et JavaScript pour créer des sites web modernes",
+      students: 1280,
+      lessons: 16,
+      level: "Débutant",
+      instructor: "Marie Dubois",
+     
+    },
+    {
+      id: 2,
+      title: "Data Science",
+      description: "Maîtrisez Python et les techniques d'analyse de données",
+      students: 952,
+      lessons: 24,
+      level: "Intermédiaire",
+      instructor: "Thomas Martin",
+   
+    },
+    {
+      id: 3,
+      title: "Marketing Digital",
+      description: "Stratégies efficaces pour promouvoir votre entreprise en ligne",
+      students: 820,
+      lessons: 18,
+      level: "Tous niveaux",
+      instructor: "Sophie Bernard",
+     
+    },
+    {
+      id: 4,
+      title: "Design UX/UI",
+      description: "Créez des interfaces utilisateur attrayantes et fonctionnelles",
+      students: 625,
+      lessons: 20,
+      level: "Intermédiaire",
+      instructor: "Paul Dupont",
 
-  const [backgroundColors, setBackgroundColors] = useState(COLOR_PALETTES[0]);
-  const [colorIndex, setColorIndex] = useState(0);
-  const [percent, setPercent] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [hoveredButton, setHoveredButton] = useState(null);
-
-  useEffect(() => {
-    if (typingRef.current) clearTimeout(typingRef.current);
-    const currentPhrase = PHRASES[currentPhraseIndex];
-    const length = displayText.length;
-
-    if (isTyping && length < currentPhrase.length) {
-      typingRef.current = setTimeout(() => {
-        setDisplayText(currentPhrase.slice(0, length + 1));
-      }, 40);
-    } else if (isTyping && length === currentPhrase.length) {
-      typingRef.current = setTimeout(() => setIsTyping(false), 2000);
-    } else if (!isTyping && length > 0) {
-      typingRef.current = setTimeout(() => {
-        setDisplayText(currentPhrase.slice(0, length - 1));
-      }, 20);
-    } else {
-      setCurrentPhraseIndex((prev) => (prev + 1) % PHRASES.length);
-      setIsTyping(true);
     }
+  ]);
 
-    return () => clearTimeout(typingRef.current);
-  }, [displayText, currentPhraseIndex, isTyping]);
+  const [testimonials, setTestimonials] = useState([
+    {
+      id: 1,
+      name: "Lucie Moreau",
+      role: "Développeuse Web",
+      content: "Cette plateforme a complètement transformé ma carrière. Les cours sont structurés de manière logique et les instructeurs sont très compétents.",
+    
+    },
+    {
+      id: 2,
+      name: "Antoine Durand",
+      role: "Étudiant",
+      content: "J'ai pu acquérir des compétences pratiques que mon université ne m'enseignait pas. Le format vidéo et les exercices pratiques sont parfaits pour mon style d'apprentissage.",
+      
+    },
+    {
+      id: 3,
+      name: "Emma Petit",
+      role: "Entrepreneure",
+      content: "En tant que fondatrice de startup, ces cours m'ont permis d'acquérir rapidement les connaissances techniques dont j'avais besoin sans devoir embaucher des consultants coûteux.",
+     
+    }
+  ]);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      let newPercent = percent + 0.1 * direction;
-      if (newPercent >= 100) {
-        newPercent = 100;
-        setDirection(-1);
-      } else if (newPercent <= 0) {
-        newPercent = 0;
-        setDirection(1);
-        setColorIndex((prev) => (prev + 1) % COLOR_PALETTES.length);
-      }
-      setPercent(newPercent);
-      setBackgroundColors(COLOR_PALETTES[colorIndex]);
-    });
-    return () => cancelAnimationFrame(id);
-  }, [percent, direction, colorIndex]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    setIsVisible(true);
+    
+    // Ajoutez ici les éventuelles API calls pour récupérer des données dynamiques
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleScroll = () => {
+    const scrollElements = document.querySelectorAll('.scroll-animation');
+    
+    scrollElements.forEach(element => {
+      const elementPosition = element.getBoundingClientRect().top;
+      const viewportHeight = window.innerHeight;
+      
+      if (elementPosition < viewportHeight - 100) {
+        element.classList.add('visible');
+      }
+    });
+  };
 
   return (
-    <>
-      <IndexNavbar fixed className={`transition-all duration-500 ${isScrolled ? 'shadow-md bg-white bg-opacity-80 backdrop-blur-md' : 'bg-transparent'}`} />
-
-      {/* ✅ Hero Section animée */}
-      <section className="relative min-h-screen flex items-center justify-start overflow-hidden px-8 animate-bg-move transition-colors duration-1000" style={{ background: `linear-gradient(${isScrolled ? '135deg' : '120deg'}, ${backgroundColors.from}, ${backgroundColors.to})`, backgroundSize: "200% 200%" }}>
-        <div className="container mx-auto px-4 relative z-10 text-left text-white py-20 animate-fadeIn">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-6 drop-shadow-lg">
-            Bienvenue sur <span className="text-yellow-300">Etudia</span>
-          </h1>
-          <p className="text-lg sm:text-xl max-w-xl mb-8 h-24" role="status" aria-live="polite">
-            {displayText}<span className="animate-blink inline-block w-1 h-5 ml-1 bg-white"></span>
-          </p>
-          <div className="flex gap-4 flex-wrap">
-            <Link to="/auth/register" className={`bg-pink-500 hover:bg-pink-600 text-white font-semibold px-6 py-3 rounded-full shadow-lg text-sm transform transition ${hoveredButton === 'start' ? 'scale-105' : ''}`} onMouseEnter={() => setHoveredButton('start')} onMouseLeave={() => setHoveredButton(null)}>
-              Commencer maintenant
-            </Link>
-            <Link to="/auth/login" className={`bg-white text-black hover:bg-indigo-600 hover:text-white font-semibold px-6 py-3 rounded-full shadow-lg text-sm transform transition ${hoveredButton === 'connect' ? 'scale-105' : ''}`} onMouseEnter={() => setHoveredButton('connect')} onMouseLeave={() => setHoveredButton(null)}>
-              Se connecter
-            </Link>
+    <div className={`welcome-page ${isVisible ? 'visible' : ''}`}>
+      {/* Hero Section */}
+      <header className="hero-section">
+        <div className="hero-content">
+          <h1> Apprendre ensemble, Réussir ensemble. </h1>
+          <p>Etudia est une plateforme éducative collaborative qui connecte étudiants et enseignants pour apprendre ensemble.</p>
+          <div className="hero-buttons">
+            <Link to="/auth/register" className="btn btn-primary">Commencer maintenant</Link>
+            <Link to="/auth/login" className="btn btn-outline">Se connecter</Link>
+          </div>
+          <div className="hero-stats">
+            <div className="stat-item">
+              <span className="stat-number">100+</span>
+              <span className="stat-label">Étudiants</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">150+</span>
+              <span className="stat-label">Cours</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">98%</span>
+              <span className="stat-label">Satisfaction</span>
+            </div>
           </div>
         </div>
-      </section>
+        <div className="hero-image">
+          <img src={elearningImage} alt="Plateforme d'apprentissage en ligne" className="w-full h-auto" />
+        </div>
+      </header>
 
-      {/* ✅ Section Features intégrée */}
+      {/* Features Section */}
       <section className="features-section scroll-animation">
         <div className="section-header">
           <h2>Pourquoi choisir notre plateforme</h2>
@@ -115,45 +136,146 @@ const Welcome = () => {
         </div>
         <div className="features-grid">
           <div className="feature-card">
-            <div className="feature-icon"><i className="fas fa-laptop-code"></i></div>
+            <div className="feature-icon">
+              <i className="fas fa-laptop-code"></i>
+            </div>
             <h3>Apprentissage interactif</h3>
             <p>Des cours interactifs avec des quiz et des projets pratiques</p>
           </div>
+         
           <div className="feature-card">
-            <div className="feature-icon"><i className="fas fa-certificate"></i></div>
-            <h3>Certifications reconnues</h3>
-            <p>Obtenez des certificats valorisés par les employeurs</p>
-          </div>
-          <div className="feature-card">
-            <div className="feature-icon"><i className="fas fa-user-graduate"></i></div>
+            <div className="feature-icon">
+              <i className="fas fa-user-graduate"></i>
+            </div>
             <h3>Instructeurs experts</h3>
             <p>Apprenez avec des professionnels du secteur</p>
           </div>
           <div className="feature-card">
-            <div className="feature-icon"><i className="fas fa-clock"></i></div>
+            <div className="feature-icon">
+              <i className="fas fa-clock"></i>
+            </div>
             <h3>Apprentissage flexible</h3>
             <p>Étudiez à votre rythme, où que vous soyez</p>
           </div>
         </div>
       </section>
 
-      {isScrolled && (
-        <button onClick={scrollToTop} title="Revenir en haut" className="fixed bottom-5 right-5 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full shadow-lg transform transition hover:scale-105">
-          ⬆️
-        </button>
-      )}
+      {/* Popular Courses Section */}
+      <section className="courses-section scroll-animation">
+        <div className="section-header">
+          <h2>Cours populaires</h2>
+          <p>Rejoignez des milliers d'apprenants qui ont déjà progressé</p>
+        </div>
+        <div className="courses-grid">
+          {courses.map(course => (
+            <div key={course.id} className="course-card">
+              <div className="course-image">
+                <img src={course.image} alt={course.title} />
+                <div className="course-level">{course.level}</div>
+              </div>
+              <div className="course-content">
+                <h3>{course.title}</h3>
+                <p>{course.description}</p>
+                <div className="course-meta">
+                  <div className="meta-item">
+                    <i className="fas fa-user"></i>
+                    <span>{course.students} étudiants</span>
+                  </div>
+                  <div className="meta-item">
+                    <i className="fas fa-book"></i>
+                    <span>{course.lessons} leçons</span>
+                  </div>
+                </div>
+                <div className="course-instructor">
+                  <div className="instructor-avatar">
+                    <img src="/api/placeholder/40/40" alt={course.instructor} />
+                  </div>
+                  <span>{course.instructor}</span>
+                </div>
+                <Link to={`/course/${course.id}`} className="btn btn-outline btn-full">
+                  Voir le cours
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="center-button">
+          <Link to="/courses" className="btn btn-primary">Voir tous les cours</Link>
+        </div>
+      </section>
 
-      <Footer />
+      {/* Statistics Section */}
+      <section className="stats-section scroll-animation">
+        <div className="stats-container">
+          <div className="stat-box">
+            <span className="stat-number">15K+</span>
+            <span className="stat-label">Étudiants satisfaits</span>
+          </div>
+          <div className="stat-box">
+            <span className="stat-number">200+</span>
+            <span className="stat-label">Cours vidéo</span>
+          </div>
+          <div className="stat-box">
+            <span className="stat-number">50+</span>
+            <span className="stat-label">Instructeurs experts</span>
+          </div>
+          <div className="stat-box">
+            <span className="stat-number">99%</span>
+            <span className="stat-label">Taux de réussite</span>
+          </div>
+        </div>
+      </section>
 
-      <style jsx>{`
-        .animate-blink { animation: blink 1s step-end infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fadeIn { animation: fadeIn 1s ease forwards; }
-        @keyframes zoomPan { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .animate-bg-move { animation: zoomPan 20s ease infinite; }
-      `}</style>
-    </>
+      {/* Testimonials Section */}
+      <section className="testimonials-section scroll-animation">
+        <div className="section-header">
+          <h2>Ce que disent nos étudiants</h2>
+          <p>Découvrez les témoignages de nos apprenants</p>
+        </div>
+        <div className="testimonials-container">
+          {testimonials.map(testimonial => (
+            <div key={testimonial.id} className="testimonial-card">
+              <div className="testimonial-content">
+                <p>"{testimonial.content}"</p>
+              </div>
+              <div className="testimonial-author">
+                <div className="author-avatar">
+                  <img src={testimonial.avatar} alt={testimonial.name} />
+                </div>
+                <div className="author-info">
+                  <h4>{testimonial.name}</h4>
+                  <p>{testimonial.role}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="cta-section scroll-animation">
+        <div className="cta-content">
+          <h2>Prêt à commencer votre parcours d'apprentissage ?</h2>
+          <p>Inscrivez-vous dès aujourd'hui et accédez à des centaines de cours de qualité</p>
+          <div className="cta-buttons">
+            <Link to="/auth/register" className="btn btn-primary">S'inscrire gratuitement</Link>
+            <Link to="/courses" className="btn btn-outline">Explorer les cours</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="newsletter-section scroll-animation">
+        <div className="newsletter-content">
+          <h3>Restez informé des nouveaux cours</h3>
+          <p>Abonnez-vous à notre newsletter pour recevoir des conseils d'apprentissage et des offres exclusives</p>
+          <form className="newsletter-form">
+            <input type="email" placeholder="Votre adresse email" required />
+            <button type="submit" className="btn btn-primary">S'abonner</button>
+          </form>
+        </div>
+      </section>
+    </div>
   );
 };
 

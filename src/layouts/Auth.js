@@ -21,7 +21,7 @@ export default function Auth() {
           <div
             className="absolute top-0 w-full h-full"
             style={{
-              background: "linear-gradient(to right, #43cea2, #185a9d)",
+              background: "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)",
             }}
           
           ></div>

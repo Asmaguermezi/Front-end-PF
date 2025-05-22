@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { LanguageContext } from "../../context/LanguageContext";
 import { translations } from "../../i18n/translations";
 import { inscriptionUtilisateur } from "../../services/ApiUser";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 export default function Register() {
   const { lang } = useContext(LanguageContext);
@@ -17,6 +18,20 @@ export default function Register() {
   const [specialite, setSpecialite] = useState("");
   const [accepteConfidentialite, setAccepteConfidentialite] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Ajout d'un effet pour appliquer le fond dès le chargement
+  useEffect(() => {
+    // Sauvegarde le style original du body
+    const originalStyle = document.body.style.background;
+    
+    // Applique le dégradé directement au body pour éviter le flash blanc
+    document.body.style.background = "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)";
+    
+    // Nettoie l'effet en restaurant le style original
+    return () => {
+      document.body.style.background = originalStyle;
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +50,7 @@ export default function Register() {
     const userData = { name, email, password, role: formattedRole, specialite };
 
     try {
-      await inscriptionUtilisateur(userData); // API avec withCredentials côté backend
+      await inscriptionUtilisateur(userData);
       toast.success("✅ Inscription réussie !");
       history.push("/auth/login");
     } catch (error) {
@@ -45,23 +60,36 @@ export default function Register() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center"
-      style={{ background: "linear-gradient(to right, #43cea2, #185a9d)" }}
+    <motion.div
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{
+        background: "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)",
+        paddingTop: "40px",
+        paddingBottom: "40px",
+      }}
     >
       <div className="container mx-auto px-4 h-full">
         <div className="flex content-center items-center justify-center h-full">
           <div className="w-full lg:w-6/12 px-4">
-            <div className="relative flex flex-col break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
-              <div className="rounded-t px-6 py-6">
-                <div className="text-center mb-3">
-                  <h6 className="text-black text-xl font-bold">{translations[lang].title}</h6>
-                </div>
-                <hr className="mt-6 border-b-1 border-blueGray-300" />
-              </div>
-
-              <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="relative flex flex-col break-words w-full mb-6 shadow-2xl rounded-2xl bg-white border-0"
+            >
+              <div className="flex-auto px-4 lg:px-10 py-10">
                 <form onSubmit={handleSubmit}>
+                  <div className="text-center mb-6">
+                    <h6 style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#4F46E5" }}>
+                      {translations[lang].title}
+                    </h6>
+                    <hr className="mt-4 border-b-1 border-blueGray-300" />
+                  </div>
+                
                   {/* Nom */}
                   <div className="relative w-full mb-3">
                     <label className="block uppercase text-black text-xs font-bold mb-2">
@@ -131,8 +159,7 @@ export default function Register() {
                         role ? "text-black" : "text-gray-400"
                       }`}
                     >
-                     
-                     <option value="" disabled>
+                      <option value="" disabled>
                         {translations[lang].chooseRole}
                       </option>
                       <option value="etudiant">{translations[lang].etudiant}</option>
@@ -168,7 +195,7 @@ export default function Register() {
                       />
                       <span className="ml-2 text-sm font-semibold text-blueGray-600">
                         {translations[lang].accept}{" "}
-                        <a href="#!" className="text-lightBlue-500">
+                        <a href="#!" className="text-indigo-600 hover:text-indigo-800">
                           {translations[lang].policy}
                         </a>
                       </span>
@@ -177,36 +204,40 @@ export default function Register() {
 
                   {/* Bouton d'inscription */}
                   <div className="text-center mt-6">
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ type: "spring", stiffness: 300 }}
                       type="submit"
-                      className="w-full text-white font-semibold rounded-lg py-3 shadow-md focus:outline-none transition-all duration-150 text-base"
+                      className="w-full text-white font-semibold rounded-lg py-3 shadow-md focus:outline-none transition-all duration-300 text-base"
                       style={{
-                        background: "linear-gradient(to right, #43cea2, #185a9d)",
+                        background: "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)",
+                        boxShadow: "0 4px 6px -1px rgba(79, 70, 229, 0.3)",
                       }}
                     >
                       {translations[lang].create}
-                    </button>
+                    </motion.button>
                   </div>
                 </form>
 
                 {/* Liens bas */}
                 <div className="flex flex-wrap mt-2">
                   <div className="w-1/2">
-                    <Link to="/auth/forget" className="text-lightBlue-500">
+                    <Link to="/auth/forget" className="text-indigo-600 hover:text-indigo-800">
                       <small>{translations[lang].forgot}</small>
                     </Link>
                   </div>
                   <div className="w-1/2 text-right">
-                    <Link to="/auth/login" className="text-black">
+                    <Link to="/auth/login" className="text-indigo-600 hover:text-indigo-800">
                       <small>{translations[lang].login}</small>
                     </Link>
                   </div>
                 </div>
-              </div> {/* end .flex-auto */}
-            </div> {/* end .card */}
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
