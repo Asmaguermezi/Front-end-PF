@@ -1,0 +1,212 @@
+/* ====== Base ====== */
+.profile-container {
+    min-height: 100vh;
+    background: linear-gradient(145deg, #e0e7ff 0%, #f0f4ff 60%, #dbeafe 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 2rem 1rem;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Décor SVG flouté pour un effet pro */
+  .profile-container::before,
+  .profile-container::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.15;
+    z-index: 0;
+  }
+  
+  .profile-container::before {
+    width: 400px;
+    height: 400px;
+    background: #6366f1;
+    top: -100px;
+    left: -100px;
+  }
+  
+  .profile-container::after {
+    width: 300px;
+    height: 300px;
+    background: #818cf8;
+    bottom: -100px;
+    right: -80px;
+  }
+  
+  /* ====== Card ====== */
+  .profile-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    padding: 3rem 2.5rem;
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .profile-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* ====== Statistiques ====== */
+  .stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+  
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .stat-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #4338ca;
+    margin-bottom: 0.4rem;
+  }
+  
+  .stat-label {
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  /* ====== Infos utilisateur ====== */
+  .profile-info {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-name {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.5rem;
+    text-transform: capitalize;
+  }
+  
+  .profile-email {
+    color: #6b7280;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-speciality {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #4338ca;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  
+  .profile-speciality i {
+    font-size: 1rem;
+  }
+  
+  /* ====== Bouton Modifier ====== */
+  .edit-button {
+    background: linear-gradient(135deg, #4338ca, #6366f1);
+    color: white;
+    padding: 0.7rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .edit-button:hover {
+    background: #3730a3;
+    transform: scale(1.05);
+  }
+  
+  .edit-button i {
+    font-size: 0.875rem;
+  }
+  
+  /* ====== Formulaire ====== */
+  .edit-form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #111827;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+  }
+  
+  .form-input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    outline: none;
+  }
+  
+  .form-input::placeholder {
+    color: #94a3b8;
+  }
+  
+  /* ====== Animation Loading ====== */
+  @keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+  }
+  
+  .loading {
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  
+  /* ====== Responsive ====== */
+  @media (max-width: 640px) {
+    .stats-container {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  
+    .profile-card {
+      padding: 2rem 1.5rem;
+    }
+  
+    .stat-value {
+      font-size: 1.8rem;
+    }
+  }
+  

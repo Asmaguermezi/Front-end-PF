@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getMonProfil, updateUtilisateurAvecImage } from "services/ApiUser";
 import { toast } from "react-toastify";
-import "./CardProfile.css";
+import "assets/styles/profile.css";
 
 export default function CardProfile() {
   const [user, setUser] = useState(null);
@@ -73,86 +73,84 @@ export default function CardProfile() {
 
   if (!user) {
     return (
-      <div className="profile-content loading">
-        <div className="loading-spinner"></div>
-        <p>Chargement de votre profil...</p>
+      <div className="flex items-center justify-center min-h-[300px]">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-500">Chargement...</p>
+        </div>
       </div>
     );
   }
 
   if (editMode) {
     return (
-      <div className="profile-content edit-mode">
-        <h2 className="edit-title">Modifier le profil</h2>
+      <div className="profile-card">
+        <button
+          onClick={() => setEditMode(false)}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        >
+          <i className="fas fa-times"></i>
+        </button>
+
         <form onSubmit={handleUpdate} className="edit-form">
-          <div className="form-group">
-            <label>Photo de profil</label>
-            <div className="avatar-upload">
-              <img
-                src={imagePreview || "https://via.placeholder.com/150"}
-                alt="Preview"
-                className="avatar-preview"
-              />
+          {/* Champ d'image désactivé */}
+          {/*
+          <div className="relative w-32 h-32 mx-auto mb-8">
+            <img
+              src={imagePreview || "https://via.placeholder.com/150"}
+              alt="Preview"
+              className="w-32 h-32 rounded-full object-cover"
+            />
+            <label className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-full opacity-0 hover:opacity-100 transition-opacity cursor-pointer">
+              <i className="fas fa-camera text-white text-xl"></i>
               <input
                 type="file"
                 onChange={handleImageAutoUpload}
-                className="file-input"
+                className="hidden"
                 accept="image/*"
               />
-              <div className="upload-overlay">
-                <i className="fas fa-camera"></i>
-                <span>Changer la photo</span>
-              </div>
+            </label>
+          </div>
+          */}
+
+          <div className="space-y-4">
+            <div className="form-group">
+              <label className="form-label">Nom complet</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name || ""}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Votre nom"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email || ""}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Votre email"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Spécialité</label>
+              <input
+                type="text"
+                name="specialite"
+                value={formData.specialite || ""}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Votre spécialité"
+              />
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Nom complet</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name || ""}
-              onChange={handleChange}
-              className="form-input"
-              placeholder="Votre nom"
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email || ""}
-              onChange={handleChange}
-              className="form-input"
-              placeholder="Votre email"
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Spécialité</label>
-            <input
-              type="text"
-              name="specialite"
-              value={formData.specialite || ""}
-              onChange={handleChange}
-              className="form-input"
-              placeholder="Votre spécialité"
-            />
-          </div>
-
-          <div className="form-actions">
-            <button
-              type="button"
-              onClick={() => setEditMode(false)}
-              className="cancel-btn"
-            >
-              <i className="fas fa-times"></i>
-              Annuler
-            </button>
-            <button type="submit" className="save-btn">
-              <i className="fas fa-check"></i>
+          <div className="text-right mt-6">
+            <button type="submit" className="edit-button">
               Enregistrer
             </button>
           </div>
@@ -162,103 +160,36 @@ export default function CardProfile() {
   }
 
   return (
-    <div className="profile-content">
-      <div className="profile-header">
-        <div className="avatar-container">
-          <img
-            src={imagePreview || "https://via.placeholder.com/150"}
-            alt="Photo de profil"
-            className="avatar-image"
-          />
-          <div className="avatar-status online"></div>
+    <div className="profile-card">
+      <div className="stats-container">
+        <div className="stat-item">
+          <div className="stat-value">12</div>
+          <div className="stat-label">Cours</div>
         </div>
-        
-        <div className="profile-info">
-          <h2 className="profile-name">{user.name}</h2>
-          <p className="profile-email">{user.email}</p>
-          <p className="profile-role">{user.specialite}</p>
+        <div className="stat-item">
+          <div className="stat-value">8</div>
+          <div className="stat-label">Certificats</div>
+        </div>
+        <div className="stat-item">
+          <div className="stat-value">4.8</div>
+          <div className="stat-label">Note</div>
         </div>
       </div>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-icon">
-            <i className="fas fa-book-open"></i>
-          </div>
-          <div className="stat-info">
-            <h3>12</h3>
-            <p>Cours suivis</p>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon">
-            <i className="fas fa-certificate"></i>
-          </div>
-          <div className="stat-info">
-            <h3>8</h3>
-            <p>Certificats</p>
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-icon">
-            <i className="fas fa-star"></i>
-          </div>
-          <div className="stat-info">
-            <h3>95%</h3>
-            <p>Taux de réussite</p>
-          </div>
+      <div className="profile-info">
+        <h2 className="profile-name">{user.name}</h2>
+        <p className="profile-email">{user.email}</p>
+        <div className="profile-speciality">
+          <i className="fas fa-graduation-cap"></i>
+          <span>{user.specialite}</span>
         </div>
       </div>
 
-      <div className="profile-actions">
-        <button
-          onClick={() => setEditMode(true)}
-          className="edit-profile-btn"
-        >
-          <i className="fas fa-edit"></i>
-          Modifier le profil
+      <div className="text-center">
+        <button onClick={() => setEditMode(true)} className="edit-button">
+          <i className="fas fa-pencil"></i>
+          Modifier
         </button>
-        <button className="settings-btn">
-          <i className="fas fa-cog"></i>
-          Paramètres
-        </button>
-      </div>
-
-      <div className="recent-progress">
-        <h3 className="section-title">Progression récente</h3>
-        <div className="progress-bars">
-          <div className="progress-item">
-            <div className="progress-header">
-              <span>JavaScript Avancé</span>
-              <span>85%</span>
-            </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: "85%" }}></div>
-            </div>
-          </div>
-
-          <div className="progress-item">
-            <div className="progress-header">
-              <span>React Fondamentaux</span>
-              <span>70%</span>
-            </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: "70%" }}></div>
-            </div>
-          </div>
-
-          <div className="progress-item">
-            <div className="progress-header">
-              <span>Node.js</span>
-              <span>60%</span>
-            </div>
-            <div className="progress-bar">
-              <div className="progress-fill" style={{ width: "60%" }}></div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import Footer from "components/Footers/Footer.js";
 
 const Welcome = () => {
   const [isVisible, setIsVisible] = useState(false);
+  
   const [courses, setCourses] = useState([
     {
       id: 1,
