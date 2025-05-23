@@ -12,32 +12,23 @@ export default function Landing() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Tous");
   const itemsPerPage = 6;
+  const role = localStorage.getItem("role") || "etudiant";
 
-  // ✅ Optionnel : détecter le rôle (utilisateur ou enseignant)
-  const role = localStorage.getItem("role") || "etudiant"; // fallback si vide
+  const categories = ["Tous", "Technologie", "Business", "Design", "Sciences"];
 
-  const filteredMatieres = matieres.filter(matiere => 
-    matiere.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    matiere.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredMatieres = matieres.filter(matiere => {
+    const matchesSearch = matiere.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                       matiere.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "Tous" || matiere.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
   
   const totalPages = Math.ceil(filteredMatieres.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentMatieres = filteredMatieres.slice(indexOfFirstItem, indexOfLastItem);
-
-  const nextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
-  };
-
-  const goToPage = (page) => {
-    setCurrentPage(page);
-  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,188 +44,177 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    // Reset to page 1 when searching
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, selectedCategory]);
 
   return (
-    <div className="min-h-screen">
+    <>
       <Navbar transparent />
       
-     
+      {/* Navigation */}
+      <nav className="navbar">
+        <div className="navbar-container">
+          <div className="logo">ETUDIA</div>
+         
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="hero-section">
-        <div className="hero-content animate-fadeIn">
-          <h1 className="hero-title animate-gradient-x">
-            ETUDIA
-          </h1>
-          <h2 className="hero-subtitle">
-            L'Éducation Réinventée
-          </h2>
-          <p className="hero-description">
-            Une expérience d'apprentissage immersive qui redéfinit
-            les standards de l'éducation numérique
-          </p>
-
-          <div className="button-group">
-            <Link
-              to={`/${role}/notifications`}
-              className="primary-button"
-            >
-              <i className="fas fa-bell"></i>
-              Notifications
-            </Link>
-
-            <Link
-              to="/profile"
-              className="secondary-button"
-            >
-              <i className="fas fa-user"></i>
-              Mon profil
-            </Link>
+        <div className="hero-container">
+          <div className="hero-content">
+            
+            <h1 className="hero-title">L'Éducation Réinventée</h1>
+            <p className="hero-subtitle">
+              Une expérience d'apprentissage immersive et moderne qui redéfinit 
+              les standards de l'éducation numérique avec des outils innovants.
+            </p>
+            <div className="hero-buttons">
+              <Link to={`/${role}/notifications`} className="btn btn-primary">
+             
+                Notifications
+              </Link>
+              <Link to="/profile" className="btn btn-secondary">
+              
+                Mon Profil
+              </Link>
+            </div>
+          
           </div>
+          
+          
+        </div>
+      </section>
+      
+      {/* Section Recherche */}
+      <section className="search-section">
+        <div className="search-container">
+          <input 
+            type="text" 
+            className="search-input" 
+            placeholder="Rechercher une matière, un cours..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <i className="fas fa-search search-icon"></i>
+        </div>
+        
+        <div className="categories-container">
+          {categories.map(category => (
+            <button
+              key={category}
+              className={`category-button ${selectedCategory === category ? 'active' : ''}`}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </button>
+          ))}
         </div>
       </section>
 
-      {/* Section Recherche */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Rechercher une matière..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-      </div>
-
-      {/* Section des matières */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="courses-grid">
-          {isLoading ? (
-            // Skeleton loader
-            [...Array(6)].map((_, index) => (
-              <div key={index} className="course-card animate-pulse">
-                <div className="course-icon"></div>
-                <div className="h-8 bg-white/10 rounded-lg mb-4 w-3/4"></div>
-                <div className="h-4 bg-white/10 rounded-lg mb-3 w-full"></div>
-                <div className="h-4 bg-white/10 rounded-lg w-2/3"></div>
-              </div>
-            ))
-          ) : currentMatieres.length > 0 ? (
-            currentMatieres.map((matiere, index) => (
-              <Link
-                key={index}
-                to={`/matiere/${matiere._id}`}
-                className="course-card"
-              >
-                <div className="course-icon">
-                  <i className="fas fa-book-open text-2xl text-white"></i>
+          <div className="courses-grid">
+            {isLoading ? (
+              [...Array(6)].map((_, index) => (
+                <div key={index} className="course-card animate-pulse">
+                  <div className="course-icon"></div>
+                  <div className="h-8 bg-gray-200 rounded-lg mb-4 w-3/4"></div>
+                  <div className="h-4 bg-gray-200 rounded-lg mb-3 w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded-lg w-2/3"></div>
                 </div>
-                
-                <h3 className="course-title">
-                  {matiere.nom}
-                </h3>
-                
-                <p className="course-description">
-                  {matiere.description}
+              ))
+            ) : currentMatieres.length > 0 ? (
+              currentMatieres.map((matiere, index) => (
+                <Link
+                  key={index}
+                  to={`/matiere/${matiere._id}`}
+                  className="course-card"
+                >
+                  <div className="course-icon">
+                    <i className="fas fa-book-open"></i>
+                  </div>
+                  <h3 className="course-title">{matiere.nom}</h3>
+                  <p className="course-description">{matiere.description}</p>
+                  <div className="course-link">
+                    <span>Explorer le cours</span>
+                    <i className="fas fa-arrow-right"></i>
+                  </div>
+                </Link>
+              ))
+            ) : searchTerm ? (
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <i className="fas fa-search"></i>
+                </div>
+                <h3 className="empty-title">Aucun résultat trouvé</h3>
+                <p className="empty-description">
+                  Aucune matière ne correspond à "{searchTerm}"
                 </p>
-                
-                <div className="course-link">
-                  <span>Explorer le cours</span>
-                  <i className="fas fa-arrow-right"></i>
-                </div>
-              </Link>
-            ))
-          ) : searchTerm ? (
-            <div className="empty-state col-span-full">
-              <div className="empty-icon">
-                <i className="fas fa-search text-3xl"></i>
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="btn btn-secondary"
+                >
+                  <i className="fas fa-times"></i>
+                  Effacer la recherche
+                </button>
               </div>
-              <h3 className="empty-title">
-                Aucun résultat trouvé
-              </h3>
-              <p className="empty-description">
-                Aucune matière ne correspond à "{searchTerm}"
-              </p>
+            ) : (
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <i className="fas fa-book-open"></i>
+                </div>
+                <h3 className="empty-title">Aucune matière disponible</h3>
+                <p className="empty-description">
+                  Les matières seront bientôt disponibles
+                </p>
+              </div>
+            )}
+          </div>
+
+          {filteredMatieres.length > itemsPerPage && (
+            <div className="pagination">
               <button
-                onClick={() => setSearchTerm("")}
-                className="secondary-button"
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="pagination-button"
               >
-                <i className="fas fa-times"></i>
-                Effacer la recherche
+                <i className="fas fa-chevron-left"></i>
+              </button>
+
+              {[...Array(totalPages)].map((_, i) => {
+                const pageNum = i + 1;
+                if (
+                  pageNum <= 2 ||
+                  pageNum > totalPages - 2 ||
+                  (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                ) {
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`pagination-button ${
+                        currentPage === pageNum ? "active" : ""
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                }
+                return null;
+              })}
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="pagination-button"
+              >
+                <i className="fas fa-chevron-right"></i>
               </button>
             </div>
-          ) : (
-            <div className="empty-state col-span-full">
-              <div className="empty-icon">
-                <i className="fas fa-book-open text-3xl"></i>
-              </div>
-              <h3 className="empty-title">
-                Aucune matière disponible
-              </h3>
-              <p className="empty-description">
-                Les matières seront bientôt disponibles
-              </p>
-            </div>
           )}
-        </div>
+        
+     
 
-        {/* Pagination */}
-        {filteredMatieres.length > itemsPerPage && (
-          <div className="pagination">
-            <button
-              onClick={prevPage}
-              disabled={currentPage === 1}
-              className="pagination-button"
-            >
-              <i className="fas fa-chevron-left"></i>
-            </button>
-
-            {[...Array(totalPages)].map((_, i) => {
-              const pageNum = i + 1;
-              if (
-                pageNum <= 2 ||
-                pageNum > totalPages - 2 ||
-                (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
-              ) {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => goToPage(pageNum)}
-                    className={`pagination-button ${
-                      currentPage === pageNum ? "active" : ""
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              } else if (
-                (pageNum === 3 && currentPage > 4) ||
-                (pageNum === totalPages - 2 && currentPage < totalPages - 3)
-              ) {
-                return (
-                  <span key={i} className="px-2 text-white">
-                    ...
-                  </span>
-                );
-              }
-              return null;
-            })}
-
-            <button
-              onClick={nextPage}
-              disabled={currentPage === totalPages}
-              className="pagination-button"
-            >
-              <i className="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        )}
-      </section>
-
-      
-
-      <Footer />
-    </div>
+ 
+    </>
   );
 }

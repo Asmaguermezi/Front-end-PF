@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getMonProfil, updateUtilisateurAvecImage } from "services/ApiUser";
 import { toast } from "react-toastify";
+import "./CardProfile.css";
 
 export default function CardProfile() {
   const [user, setUser] = useState(null);
@@ -19,6 +20,7 @@ export default function CardProfile() {
         }
       } catch (err) {
         console.error("❌ Erreur récupération profil :", err.response?.data || err.message);
+        toast.error("Erreur lors du chargement du profil");
       }
     };
     fetchUser();
@@ -38,10 +40,10 @@ export default function CardProfile() {
       setUser(res.data);
       setFormData(res.data);
       setImagePreview(`http://localhost:5000/files/${res.data.image}?t=${Date.now()}`);
-      toast.success("📸 Image mise à jour automatiquement !");
+      toast.success("Image mise à jour avec succès !");
     } catch (error) {
-      toast.error("❌ Erreur lors de la mise à jour de l'image");
-      console.error("Erreur upload auto image :", error);
+      toast.error("Erreur lors de la mise à jour de l'image");
+      console.error("Erreur upload image :", error);
     }
   };
 
@@ -52,10 +54,7 @@ export default function CardProfile() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-
     const form = new FormData();
-
-    // Ajouter uniquement les champs nécessaires
     form.append("name", formData.name || "");
     form.append("email", formData.email || "");
     form.append("specialite", formData.specialite || "");
@@ -65,102 +64,199 @@ export default function CardProfile() {
       setUser(res.data);
       setFormData(res.data);
       setEditMode(false);
-      toast.success("✅ Informations mises à jour !");
+      toast.success("Profil mis à jour avec succès !");
     } catch (error) {
-      toast.error("❌ Erreur lors de la mise à jour");
-      console.error("Erreur lors de la mise à jour :", error);
+      toast.error("Erreur lors de la mise à jour du profil");
+      console.error("Erreur mise à jour :", error);
     }
   };
 
-  const handleCancel = () => {
-    setEditMode(false);
-    setFormData(user);
-    setImagePreview(`http://localhost:5000/files/${user.image}`);
-  };
+  if (!user) {
+    return (
+      <div className="profile-content loading">
+        <div className="loading-spinner"></div>
+        <p>Chargement de votre profil...</p>
+      </div>
+    );
+  }
 
-  if (!user) return <p className="text-center mt-10">Chargement...</p>;
-
-  return editMode ? (
-    <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64 p-6">
-      <h3 className="text-xl font-semibold mb-4">Modifier Profil</h3>
-      <form onSubmit={handleUpdate}>
-        <div className="mb-4">
-          <label className="block text-blueGray-600 capitalize mb-1">Image</label>
-          <input
-            type="file"
-            name="image"
-            onChange={handleImageAutoUpload}
-            className="mb-2"
-          />
-          {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="preview"
-              className="mt-2 w-24 h-24 rounded-full object-cover"
-            />
-          )}
-        </div>
-
-        {["name", "email", "specialite"].map((field) => (
-          <div key={field} className="mb-4">
-            <label className="block text-blueGray-600 capitalize mb-1">{field}</label>
-            <input
-              type={field === "email" ? "email" : "text"}
-              name={field}
-              value={formData[field] || ""}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-lightBlue-500"
-            />
-          </div>
-        ))}
-
-        <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="mr-4 px-5 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 transition"
-          >
-            Annuler
-          </button>
-          <button
-            type="submit"
-            className="px-5 py-2 bg-lightBlue-500 text-white font-semibold rounded hover:bg-lightBlue-600 transition"
-          >
-            Sauvegarder
-          </button>
-        </div>
-      </form>
-    </div>
-  ) : (
-    <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
-      <div className="px-6">
-        <div className="flex flex-wrap justify-center">
-          <div className="w-full lg:w-3/12 px-4 flex justify-center">
-            <div className="relative">
+  if (editMode) {
+    return (
+      <div className="profile-content edit-mode">
+        <h2 className="edit-title">Modifier le profil</h2>
+        <form onSubmit={handleUpdate} className="edit-form">
+          <div className="form-group">
+            <label>Photo de profil</label>
+            <div className="avatar-upload">
               <img
-                alt="..."
-                src={`http://localhost:5000/files/${user.image}`}
-                className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
+                src={imagePreview || "https://via.placeholder.com/150"}
+                alt="Preview"
+                className="avatar-preview"
               />
+              <input
+                type="file"
+                onChange={handleImageAutoUpload}
+                className="file-input"
+                accept="image/*"
+              />
+              <div className="upload-overlay">
+                <i className="fas fa-camera"></i>
+                <span>Changer la photo</span>
+              </div>
             </div>
           </div>
-          <div className="w-full lg:w-4/12 px-4 text-center mt-20">
-            <h3 className="text-4xl font-semibold leading-normal text-blueGray-700">
-              {user.name}
-            </h3>
-            <p className="text-sm text-blueGray-400">{user.email}</p>
-            <p className="text-sm text-blueGray-400">{user.specialite}</p>
+
+          <div className="form-group">
+            <label>Nom complet</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name || ""}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Votre nom"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email || ""}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Votre email"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Spécialité</label>
+            <input
+              type="text"
+              name="specialite"
+              value={formData.specialite || ""}
+              onChange={handleChange}
+              className="form-input"
+              placeholder="Votre spécialité"
+            />
+          </div>
+
+          <div className="form-actions">
+            <button
+              type="button"
+              onClick={() => setEditMode(false)}
+              className="cancel-btn"
+            >
+              <i className="fas fa-times"></i>
+              Annuler
+            </button>
+            <button type="submit" className="save-btn">
+              <i className="fas fa-check"></i>
+              Enregistrer
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
+  return (
+    <div className="profile-content">
+      <div className="profile-header">
+        <div className="avatar-container">
+          <img
+            src={imagePreview || "https://via.placeholder.com/150"}
+            alt="Photo de profil"
+            className="avatar-image"
+          />
+          <div className="avatar-status online"></div>
+        </div>
+        
+        <div className="profile-info">
+          <h2 className="profile-name">{user.name}</h2>
+          <p className="profile-email">{user.email}</p>
+          <p className="profile-role">{user.specialite}</p>
+        </div>
+      </div>
+
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-icon">
+            <i className="fas fa-book-open"></i>
+          </div>
+          <div className="stat-info">
+            <h3>12</h3>
+            <p>Cours suivis</p>
           </div>
         </div>
 
-        <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-          <div className="w-full lg:w-9/12 px-4 mx-auto">
-            <button
-              onClick={() => setEditMode(true)}
-              className="inline-block px-6 py-3 bg-lightBlue-500 text-white font-semibold rounded-md shadow hover:bg-lightBlue-600 transition"
-            >
-              Modifier le profil
-            </button>
+        <div className="stat-card">
+          <div className="stat-icon">
+            <i className="fas fa-certificate"></i>
+          </div>
+          <div className="stat-info">
+            <h3>8</h3>
+            <p>Certificats</p>
+          </div>
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon">
+            <i className="fas fa-star"></i>
+          </div>
+          <div className="stat-info">
+            <h3>95%</h3>
+            <p>Taux de réussite</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="profile-actions">
+        <button
+          onClick={() => setEditMode(true)}
+          className="edit-profile-btn"
+        >
+          <i className="fas fa-edit"></i>
+          Modifier le profil
+        </button>
+        <button className="settings-btn">
+          <i className="fas fa-cog"></i>
+          Paramètres
+        </button>
+      </div>
+
+      <div className="recent-progress">
+        <h3 className="section-title">Progression récente</h3>
+        <div className="progress-bars">
+          <div className="progress-item">
+            <div className="progress-header">
+              <span>JavaScript Avancé</span>
+              <span>85%</span>
+            </div>
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: "85%" }}></div>
+            </div>
+          </div>
+
+          <div className="progress-item">
+            <div className="progress-header">
+              <span>React Fondamentaux</span>
+              <span>70%</span>
+            </div>
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: "70%" }}></div>
+            </div>
+          </div>
+
+          <div className="progress-item">
+            <div className="progress-header">
+              <span>Node.js</span>
+              <span>60%</span>
+            </div>
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: "60%" }}></div>
+            </div>
           </div>
         </div>
       </div>

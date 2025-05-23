@@ -16,7 +16,6 @@ const Welcome = () => {
       lessons: 16,
       level: "Débutant",
       instructor: "Marie Dubois",
-     
     },
     {
       id: 2,
@@ -26,7 +25,6 @@ const Welcome = () => {
       lessons: 24,
       level: "Intermédiaire",
       instructor: "Thomas Martin",
-   
     },
     {
       id: 3,
@@ -36,7 +34,6 @@ const Welcome = () => {
       lessons: 18,
       level: "Tous niveaux",
       instructor: "Sophie Bernard",
-     
     },
     {
       id: 4,
@@ -46,7 +43,6 @@ const Welcome = () => {
       lessons: 20,
       level: "Intermédiaire",
       instructor: "Paul Dupont",
-
     }
   ]);
 
@@ -56,29 +52,23 @@ const Welcome = () => {
       name: "Lucie Moreau",
       role: "Développeuse Web",
       content: "Cette plateforme a complètement transformé ma carrière. Les cours sont structurés de manière logique et les instructeurs sont très compétents.",
-    
     },
     {
       id: 2,
       name: "Antoine Durand",
       role: "Étudiant",
       content: "J'ai pu acquérir des compétences pratiques que mon université ne m'enseignait pas. Le format vidéo et les exercices pratiques sont parfaits pour mon style d'apprentissage.",
-      
     },
     {
       id: 3,
       name: "Emma Petit",
       role: "Entrepreneure",
       content: "En tant que fondatrice de startup, ces cours m'ont permis d'acquérir rapidement les connaissances techniques dont j'avais besoin sans devoir embaucher des consultants coûteux.",
-     
     }
   ]);
 
   useEffect(() => {
     setIsVisible(true);
-    
-    // Ajoutez ici les éventuelles API calls pour récupérer des données dynamiques
-    
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -87,11 +77,9 @@ const Welcome = () => {
 
   const handleScroll = () => {
     const scrollElements = document.querySelectorAll('.scroll-animation');
-    
     scrollElements.forEach(element => {
       const elementPosition = element.getBoundingClientRect().top;
       const viewportHeight = window.innerHeight;
-      
       if (elementPosition < viewportHeight - 100) {
         element.classList.add('visible');
       }
@@ -104,16 +92,17 @@ const Welcome = () => {
       <div className={`welcome-page ${isVisible ? 'visible' : ''}`}>
         {/* Hero Section */}
         <header className="hero-section">
+     
           <div className="hero-content">
-            <h1> Apprendre ensemble, Réussir ensemble. </h1>
-            <p className="pl-12 text-left max-w-3xl mx-auto">
+            <h1>Apprendre ensemble, Réussir ensemble.</h1>
+            <p className="hero-description">
               Etudia est une plateforme éducative collaborative qui connecte étudiants et enseignants pour apprendre ensemble.
             </p>
             <div className="hero-buttons">
               <Link to="/auth/register" className="btn btn-primary">Commencer maintenant</Link>
               <Link to="/auth/login" className="btn btn-outline">Se connecter</Link>
             </div>
-            <div className="hero-stats pl-12">
+            <div className="hero-stats">
               <div className="stat-item">
                 <span className="stat-number">100+</span>
                 <span className="stat-label">Étudiants</span>
@@ -129,7 +118,7 @@ const Welcome = () => {
             </div>
           </div>
           <div className="hero-image">
-            <img src={elearningImage} alt="Plateforme d'apprentissage en ligne" className="w-full h-auto" />
+            <img src={elearningImage} alt="Plateforme d'apprentissage en ligne" className="hero-img" />
           </div>
         </header>
 
@@ -147,11 +136,10 @@ const Welcome = () => {
               <h3>Apprentissage interactif</h3>
               <p>Des cours interactifs avec des quiz et des projets pratiques</p>
             </div>
-           
             <div className="feature-card">
               <div className="feature-icon">
                 <i className="fas fa-user-graduate"></i>
-            </div>
+              </div>
               <h3>Instructeurs experts</h3>
               <p>Apprenez avec des professionnels du secteur</p>
             </div>
@@ -164,8 +152,6 @@ const Welcome = () => {
             </div>
           </div>
         </section>
-
-        
 
         {/* Statistics Section */}
         <section className="stats-section scroll-animation">
@@ -189,31 +175,7 @@ const Welcome = () => {
           </div>
         </section>
 
-        {/* Testimonials Section */}
-        <section className="testimonials-section scroll-animation">
-          <div className="section-header">
-            <h2>Ce que disent nos étudiants</h2>
-            <p>Découvrez les témoignages de nos apprenants</p>
-          </div>
-          <div className="testimonials-container">
-            {testimonials.map(testimonial => (
-              <div key={testimonial.id} className="testimonial-card">
-                <div className="testimonial-content">
-                  <p>"{testimonial.content}"</p>
-                </div>
-                <div className="testimonial-author">
-                  <div className="author-avatar">
-                    <img src={testimonial.avatar} alt={testimonial.name} />
-                  </div>
-                  <div className="author-info">
-                    <h4>{testimonial.name}</h4>
-                    <p>{testimonial.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+      
 
         {/* Call to Action Section */}
         <section className="cta-section scroll-animation">
@@ -221,8 +183,7 @@ const Welcome = () => {
             <h2>Prêt à commencer votre parcours d'apprentissage ?</h2>
             <p>Inscrivez-vous dès aujourd'hui et accédez à des centaines de cours de qualité</p>
             <div className="cta-buttons">
-              <Link to="/auth/register" className="btn btn-primary">S'inscrire dés maintenant</Link>
-              
+              <Link to="/auth/register" className="btn btn-primary">S'inscrire dès maintenant</Link>
             </div>
           </div>
         </section>
