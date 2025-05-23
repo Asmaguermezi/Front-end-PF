@@ -27,6 +27,15 @@
 
     <!-- Clé Google Maps (remplace YOUR_KEY_HERE si nécessaire) -->
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
+    <script>
+      // Applique le thème sauvegardé au chargement
+      if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
   </head>
 
   <body class="text-blueGray-700 antialiased">
