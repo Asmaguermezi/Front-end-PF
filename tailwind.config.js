@@ -6,7 +6,7 @@ module.exports = {
     "./public/**/*.html",
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
-  darkMode: ["class", '[data-theme="dark"]'], // ✅ Supporte les deux méthodes
+  darkMode: ["class", '[data-theme="dark"]'],
   theme: {
     colors: {
       ...colors,
@@ -64,6 +64,16 @@ module.exports = {
       minWidth: {
         "140-px": "140px",
         48: "12rem",
+      },
+      width: {
+        "90": "360px",
+        "95": "380px",
+        "100": "400px",
+        "105": "420px",
+        "110": "440px",
+        "115": "460px",
+        "120": "480px",
+        "125": "500px", // ✅ utilisée pour la carte
       },
       backgroundSize: {
         full: "100%",

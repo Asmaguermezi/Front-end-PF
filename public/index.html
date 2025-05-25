@@ -9,14 +9,14 @@
       content="Web site created using create-react-app"
     />
 
-    <!-- ✅ Nouveau favicon PNG -->
-    <link rel="icon" type="image/png" href="%PUBLIC_URL%/favicon-32x32.png" />
+    <!-- ✅ Nouveau favicon personnalisé -->
+    <link rel="icon" type="image/png" href="%PUBLIC_URL%/favicon.png" />
 
     <!-- Icône Apple (optionnel) -->
     <link
       rel="apple-touch-icon"
-      sizes="76x76"
-      href="%PUBLIC_URL%/apple-icon.png"
+      sizes="192x192"
+      href="%PUBLIC_URL%/favicon.png"
     />
 
     <!-- Manifest pour installation mobile -->
@@ -30,7 +30,11 @@
 
     <script>
       // Applique le thème sauvegardé au chargement
-      if (localStorage.theme === 'dark' || (!localStorage.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (
+        localStorage.theme === 'dark' ||
+        (!localStorage.theme &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');

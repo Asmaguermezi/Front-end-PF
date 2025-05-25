@@ -3,11 +3,13 @@ import React from "react";
 export default function FooterSmall(props) {
   return (
     <>
+    
       <footer
+        style={{ background: "linear-gradient(180deg,rgb(100, 86, 204) 0%,rgb(103, 79, 198) 100%)" }}
         className={
           (props.absolute
-            ? "absolute w-full bottom-0 bg-gradient-to-b from-blue-400 to-blue-700"
-            : "relative bg-gradient-to-b from-blue-400 to-blue-700") + " pb-6"
+            ? "absolute w-full bottom-0 pb-6"
+            : "relative pb-6")
         }
       >
         <div className="container mx-auto px-4">

@@ -19,15 +19,9 @@ export default function Register() {
   const [accepteConfidentialite, setAccepteConfidentialite] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Ajout d'un effet pour appliquer le fond dès le chargement
   useEffect(() => {
-    // Sauvegarde le style original du body
     const originalStyle = document.body.style.background;
-    
-    // Applique le dégradé directement au body pour éviter le flash blanc
     document.body.style.background = "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)";
-    
-    // Nettoie l'effet en restaurant le style original
     return () => {
       document.body.style.background = originalStyle;
     };
@@ -35,20 +29,16 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!accepteConfidentialite) {
       toast.error("❌ Tu dois accepter la politique de confidentialité.");
       return;
     }
-
     if (password.length < 6) {
       toast.error("❌ Le mot de passe doit contenir au moins 6 caractères.");
       return;
     }
-
     const formattedRole = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
     const userData = { name, email, password, role: formattedRole, specialite };
-
     try {
       await inscriptionUtilisateur(userData);
       toast.success("✅ Inscription réussie !");
@@ -65,34 +55,38 @@ export default function Register() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6 }}
-      className="min-h-screen flex items-center justify-center px-4"
+      className="min-h-screen flex items-start justify-center px-4"
       style={{
         background: "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)",
-        paddingTop: "40px",
+        paddingTop: "20px",
         paddingBottom: "40px",
       }}
     >
       <div className="container mx-auto px-4 h-full">
-        <div className="flex content-center items-center justify-center h-full">
-          <div className="w-full lg:w-6/12 px-4">
+        <div className="flex content-start items-start justify-end h-full">
+          <div
+            className="w-full lg:w-4/12 px-4 flex justify-end"
+            style={{ marginTop: "10px", marginRight: "3rem" }}
+          >
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="relative flex flex-col break-words w-full mb-6 shadow-2xl rounded-2xl bg-white border-0"
+              className="relative flex flex-col break-words w-full max-w-md mb-6 shadow-2xl rounded-3xl bg-white border-0"
+              style={{ borderRadius: '2rem' }}
             >
-              <div className="flex-auto px-4 lg:px-10 py-10">
+              <div className="flex-auto px-4 lg:px-10 py-6 text-sm">
                 <form onSubmit={handleSubmit}>
-                  <div className="text-center mb-6">
+                  <div className="text-center mb-4">
                     <h6 style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#4F46E5" }}>
                       {translations[lang].title}
                     </h6>
-                    <hr className="mt-4 border-b-1 border-blueGray-300" />
+                    <hr className="mt-3 border-b-1 border-blueGray-300" />
                   </div>
-                
+
                   {/* Nom */}
-                  <div className="relative w-full mb-3">
-                    <label className="block uppercase text-black text-xs font-bold mb-2">
+                  <div className="mb-2">
+                    <label className="block uppercase text-black text-sm font-semibold mb-1">
                       {translations[lang].name}
                     </label>
                     <input
@@ -100,14 +94,14 @@ export default function Register() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder={translations[lang].placeholderName}
-                      className="border px-3 py-3 rounded text-sm shadow w-full focus:outline-none focus:ring"
+                      className="border px-3 py-2 rounded text-sm shadow w-full focus:outline-none focus:ring"
                       required
                     />
                   </div>
 
                   {/* Email */}
-                  <div className="relative w-full mb-3">
-                    <label className="block uppercase text-black text-xs font-bold mb-2">
+                  <div className="mb-2">
+                    <label className="block uppercase text-black text-sm font-semibold mb-1">
                       {translations[lang].email}
                     </label>
                     <input
@@ -115,14 +109,14 @@ export default function Register() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder={translations[lang].placeholderEmail}
-                      className="border px-3 py-3 rounded text-sm shadow w-full focus:outline-none focus:ring"
+                      className="border px-3 py-2 rounded text-sm shadow w-full focus:outline-none focus:ring"
                       required
                     />
                   </div>
 
                   {/* Mot de passe */}
-                  <div className="relative w-full mb-3">
-                    <label className="block uppercase text-black text-xs font-bold mb-2">
+                  <div className="mb-2">
+                    <label className="block uppercase text-black text-sm font-semibold mb-1">
                       {translations[lang].password}
                     </label>
                     <div className="relative">
@@ -131,31 +125,30 @@ export default function Register() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder={translations[lang].placeholderPassword}
-                        className="border px-3 py-3 pr-12 rounded text-sm shadow w-full focus:outline-none focus:ring"
+                        className="border px-3 py-2 pr-12 rounded text-sm shadow w-full focus:outline-none focus:ring"
                         required
                       />
                       <button
                         type="button"
-                        onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-black"
                         tabIndex={-1}
+                        onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  
                       </button>
                     </div>
                   </div>
 
                   {/* Rôle */}
-                  <div className="relative w-full mb-3">
-                    <label htmlFor="role" className="block uppercase text-black text-xs font-bold mb-2">
+                  <div className="mb-2">
+                    <label className="block uppercase text-black text-sm font-semibold mb-1">
                       {translations[lang].role}
                     </label>
                     <select
-                      id="role"
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
                       required
-                      className={`border px-3 py-3 rounded text-sm shadow w-full focus:outline-none focus:ring ${
+                      className={`border px-3 py-2 rounded text-sm shadow w-full focus:outline-none focus:ring ${
                         role ? "text-black" : "text-gray-400"
                       }`}
                     >
@@ -168,32 +161,31 @@ export default function Register() {
                   </div>
 
                   {/* Spécialité */}
-                  <div className="relative w-full mb-3">
-                    <label htmlFor="specialite" className="block uppercase text-black text-xs font-bold mb-2">
+                  <div className="mb-2">
+                    <label className="block uppercase text-black text-sm font-semibold mb-1">
                       {translations[lang].specialite}
                     </label>
                     <input
-                      id="specialite"
                       type="text"
                       value={specialite}
                       onChange={(e) => setSpecialite(e.target.value)}
                       placeholder={translations[lang].placeholderSpecialite}
-                      className="border px-3 py-3 rounded text-sm shadow w-full focus:outline-none focus:ring"
+                      className="border px-3 py-2 rounded text-sm shadow w-full focus:outline-none focus:ring"
                       required
                     />
                   </div>
 
                   {/* Politique de confidentialité */}
-                  <div className="mb-4">
+                  <div className="mb-2">
                     <label className="inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
                         checked={accepteConfidentialite}
                         onChange={(e) => setAccepteConfidentialite(e.target.checked)}
-                        className="form-checkbox border bg-white rounded ml-1 w-5 h-5 focus:outline-none"
+                        className="form-checkbox border bg-white rounded ml-1 w-4 h-4 focus:outline-none"
                         required
                       />
-                      <span className="ml-2 text-sm font-semibold text-blueGray-600">
+                      <span className="ml-2 text-sm font-medium text-blueGray-600">
                         {translations[lang].accept}{" "}
                         <a href="#!" className="text-indigo-600 hover:text-indigo-800">
                           {translations[lang].policy}
@@ -202,8 +194,8 @@ export default function Register() {
                     </label>
                   </div>
 
-                  {/* Bouton d'inscription */}
-                  <div className="text-center mt-6">
+                  {/* Bouton */}
+                  <div className="text-center mt-4">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -223,12 +215,12 @@ export default function Register() {
                 {/* Liens bas */}
                 <div className="flex flex-wrap mt-2">
                   <div className="w-1/2">
-                    <Link to="/auth/forget" className="text-indigo-600 hover:text-indigo-800">
+                    <Link to="/auth/forget" className="text-indigo-600 hover:text-indigo-800 text-sm">
                       <small>{translations[lang].forgot}</small>
                     </Link>
                   </div>
                   <div className="w-1/2 text-right">
-                    <Link to="/auth/login" className="text-indigo-600 hover:text-indigo-800">
+                    <Link to="/auth/login" className="text-indigo-600 hover:text-indigo-800 text-sm">
                       <small>{translations[lang].login}</small>
                     </Link>
                   </div>

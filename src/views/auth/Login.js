@@ -14,15 +14,9 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
 
-  // Ajout d'un effet pour appliquer le fond dès le chargement
   useEffect(() => {
-    // Sauvegarde le style original du body
     const originalStyle = document.body.style.background;
-    
-    // Applique le dégradé directement au body pour éviter le flash blanc
     document.body.style.background = "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)";
-    
-    // Nettoie l'effet en restaurant le style original
     return () => {
       document.body.style.background = originalStyle;
     };
@@ -31,12 +25,8 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 🔐 Envoi du login avec withCredentials pour stocker le cookie
       const response = await loginUtilisateur({ email, password }, { withCredentials: true });
-
       toast.success("✅ Connexion réussie !");
-
-      // ✅ Redirection vers l'interface principale
       history.push("/landing");
     } catch (error) {
       toast.error("❌ Email ou mot de passe incorrect.");
@@ -50,21 +40,26 @@ export default function Login() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6 }}
-      className="min-h-screen flex items-center justify-center px-4"
+      className="min-h-screen flex items-start justify-end px-4"
       style={{
         background: "linear-gradient(90deg, #4F46E5 0%, #7E22CE 100%)",
         paddingTop: "20px",
         paddingBottom: "60px",
       }}
     >
-      <div className="container mx-auto px-4 h-full" style={{ marginTop: "-80px" }}>
-        <div className="flex content-center items-center justify-center h-full">
-          <div className="w-full lg:w-4/12 px-4">
+      <div className="container mx-auto px-4 h-full">
+        <div className="flex content-start items-start justify-end h-full">
+          {/* ✅ Carte alignée à droite, légèrement en haut, non collée */}
+          <div
+            className="w-full lg:w-4/12 px-4 flex justify-end"
+            style={{ marginTop: "40px", marginRight: "3rem" }}
+          >
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="relative flex flex-col break-words w-full mb-6 shadow-2xl rounded-2xl bg-white border-0"
+              className="relative flex flex-col break-words w-full max-w-md mb-6 shadow-2xl rounded-3xl bg-white border-0"
+              style={{ borderRadius: '2rem' }}
             >
               <div className="flex-auto px-4 lg:px-10 py-10">
                 <form onSubmit={handleSubmit}>
@@ -105,7 +100,7 @@ export default function Login() {
                     />
                   </div>
 
-                  {/* Se souvenir de moi */}
+                  {/* Se souvenir de moi 
                   <div className="mb-4">
                     <label className="inline-flex items-center cursor-pointer">
                       <input
@@ -120,7 +115,7 @@ export default function Login() {
                     </label>
                   </div>
 
-                  {/* Connexion */}
+                  /* Connexion */}
                   <div className="text-center mt-6">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
